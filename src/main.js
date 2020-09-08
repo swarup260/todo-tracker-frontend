@@ -1,21 +1,14 @@
-import Vue from "vue";
-import App from "./App.vue";
-import router from "./router";
-import store from "./store";
-/* eslint-disable */
-/**
- * Although is not recommended you can use the full bundle of Vue Material.
- * This will import ALL components and UI Elements, and will hurt performance:
- */
-import VueMaterial from 'vue-material'
-import 'vue-material/dist/vue-material.min.css'
+import Vue from 'vue'
+import App from './App.vue'
+import router from './router'
+import store from './store'
+import vuetify from './plugins/vuetify';
 
-Vue.use(VueMaterial)
-// 
-Vue.config.productionTip = false;
+Vue.config.productionTip = false
 
 new Vue({
   router,
   store,
+  vuetify,
   render: h => h(App)
-}).$mount("#app");
+}).$mount('#app')
