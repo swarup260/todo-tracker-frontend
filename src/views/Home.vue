@@ -37,7 +37,7 @@
 </template>
 <script>
 import { rules } from "../utils/validation-rule";
-
+import { mapActions }  from 'vuex'
 export default {
   name: "SignUp",
   data() {
@@ -52,9 +52,12 @@ export default {
     };
   },
   methods: {
+    ...mapActions({
+      login : 'auth/login'
+    }),
     submitHandler() {
       if (this.$refs.loginForm.validate()) {
-        console.log({ ...this.userInput });
+        this.login({ ...this.userInput })
       }
     },
     reset() {
