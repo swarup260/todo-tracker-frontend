@@ -55,9 +55,13 @@ export default {
     ...mapActions({
       login : 'auth/login'
     }),
-    submitHandler() {
+    async submitHandler() {
       if (this.$refs.loginForm.validate()) {
-        this.login({ ...this.userInput })
+         let result = await this.login({ ...this.userInput });
+         if (result) {
+            this.$router.push('Dashboard');
+         }
+
       }
     },
     reset() {

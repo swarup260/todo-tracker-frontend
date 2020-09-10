@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-form ref="addToDoForm" @submit.prevent="addTodo">
+    <v-form ref="addToDoForm" @submit.prevent="submitTodo">
       <v-row class="mb-6" justify="center" no-gutters>
         <v-text-field v-model="inputUser.taskName" :rules="inputRules" label="Task Name" outlined></v-text-field>
       </v-row>
@@ -12,7 +12,7 @@
           <v-switch v-model="inputUser.status" class="ma-2" label="Status"></v-switch>
         </v-col>
         <v-col lg="6">
-          <v-dialog ref="dialog" v-model="modal" :return-value.sync="date" persistent width="290px">
+          <v-dialog ref="dialog" v-model="modal" :return-value.sync="inputUser.deadline" persistent width="290px">
             <template v-slot:activator="{ on, attrs }">
               <v-text-field
                 v-model="inputUser.deadline"
@@ -22,10 +22,10 @@
                 v-on="on"
               ></v-text-field>
             </template>
-            <v-date-picker v-model="date" scrollable>
+            <v-date-picker v-model="inputUser.deadline" scrollable>
               <v-spacer></v-spacer>
               <v-btn text color="primary" @click="modal = false">Cancel</v-btn>
-              <v-btn text color="primary" @click="$refs.dialog.save(date)">OK</v-btn>
+              <v-btn text color="primary" @click="$refs.dialog.save(inputUser.deadline)">OK</v-btn>
             </v-date-picker>
           </v-dialog>
         </v-col>
@@ -39,8 +39,9 @@
 
 <script>
 import { rules } from "../utils/validation-rule";
+import { mapActions }  from 'vuex'
 export default {
-  data: function () {
+ data() {
     return {
       modal: false,
       inputRules: rules.inputRules,
@@ -55,9 +56,12 @@ export default {
   watch: {
   },
   methods: {
-    addTodo() {
+    ...mapActions({
+      addTodo : 'todo/addTodo'
+    }),
+    submitTodo() {
       if (this.$refs.addToDoForm.validate()) {
-        // this.login({ ...this.userInput })
+        this.addTodo({ ...this.inputUser })
       }
     },
   },
