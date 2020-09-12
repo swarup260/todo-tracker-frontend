@@ -40,6 +40,7 @@
 </template>
 <script>
 import {rules} from "../utils/validation-rule";
+import { mapActions } from 'vuex'
 
 export default {
   name: "SignUp",
@@ -56,9 +57,16 @@ export default {
     };
   },
   methods: {
-    submitHandler() {
+    ...mapActions({
+      register : 'auth/register'
+    }),
+    async submitHandler() {
       if (this.$refs.signUpForm.validate()) {
         console.log({ ...this.userInput });
+        let result = await this.register({ ...this.userInput });
+         if (result) {
+            this.$router.push('Dashboard');
+         }
       }
     },
     reset() {

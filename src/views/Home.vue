@@ -36,6 +36,10 @@
   </v-container>
 </template>
 <script>
+/* 
+snackbar show to state change
+https://dev.to/viniciuskneves/watch-for-vuex-state-changes-2mgj
+*/
 import { rules } from "../utils/validation-rule";
 import { mapActions }  from 'vuex'
 export default {

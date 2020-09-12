@@ -3,7 +3,9 @@ import {
   endpoints
 } from "../api/urls";
 
-import {storeData} from '../utils/localStorage';
+import {
+  storeData
+} from '../utils/localStorage';
 
 export default ({
   namespaced: true,
@@ -23,23 +25,85 @@ export default ({
   },
   actions: {
     async login({
+      commit,
       dispatch
     }, credentials) {
       try {
         let response = await axios.post(endpoints.users.login, credentials);
-        if (response.status == 200) {
-          dispatch('setToken', response.data.token);
+        if (response.status == 200 && response.data.token) {
+          dispatch('setToken', response.data);
           return true;
+        } else {
+          commit("SET_MESSAGE", {
+            message: "Invalid Request",
+            type: "error"
+          }, {
+            root: true
+          });
+          return false;
         }
       } catch (error) {
-        console.log(error.response);
+        // { root: true } to access the global mutations
+        commit("SET_MESSAGE", {
+          message: error.response.data.message,
+          type: "error"
+        }, {
+          root: true
+        });
+      }
+    },
+    async register({
+      commit,
+      dispatch
+    }, credentials) {
+      try {
+        let response = await axios.post(endpoints.users.register, credentials);
+        if (response.status == 200 && response.data.token) {
+          dispatch('setToken', response.data);
+          return true;
+        } else {
+          commit("SET_MESSAGE", {
+            message: "Invalid Request",
+            type: "error"
+          }, {
+            root: true
+          });
+          return false;
+        }
+      } catch (error) {
+        // { root: true } to access the global mutations
+        commit("SET_MESSAGE", {
+          message: error.response.data.message,
+          type: "error"
+        }, {
+          root: true
+        });
       }
     },
     async setToken({
       commit
-    }, token) {
-      commit("SET_TOKEN", token);
-      storeData('token',token);
-    }
+    }, data) {
+      commit("SET_TOKEN", data.token);
+      storeData('token', data.token);
+      commit("SET_MESSAGE", {
+        message: data.message,
+        type: "success"
+      }, {
+        root: true
+      });
+      /* get the user information */
+      try {
+        let response = await axios.get(endpoints.users.getUserData);
+        commit("SET_USER" , response.data.data);
+      } catch (error) {
+        commit("SET_MESSAGE", {
+          message: error.response.data.message,
+          type: "error"
+        }, {
+          root: true
+        });
+      }
+      
+    },
   }
 })

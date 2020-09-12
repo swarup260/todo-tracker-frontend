@@ -3,7 +3,8 @@ const endpoints = {
     users : {
         register : '/users/register',
         login : '/users/login',
-        update : '/users'
+        update : '/users',
+        getUserData :'/users'
     },
     todos : {
         todos : '/todos'
