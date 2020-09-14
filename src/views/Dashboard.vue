@@ -26,13 +26,13 @@
     </v-btn>
     <v-container>
       <v-row >
-        <v-col cols="12" sm="4" v-for="todo in todos" :key="todo.id">
+        <v-col cols="12" sm="4" v-for="todo in getTodos" :key="todo.id">
         <v-card class="mx-auto" max-width="344" color="#385F73" dark>
           <v-card-title class="headline">{{todo.taskName}}</v-card-title>
-          <v-card-subtitle>{{ todo.deadline }}</v-card-subtitle>
+          <v-card-subtitle>DeadLine : {{ new Date(todo.deadline).toLocaleDateString() }}</v-card-subtitle>
           <v-card-text>
             <div class="text--primary">
-              {{ todo.Description }}
+              {{ todo.description }}
             </div>
           </v-card-text>
           <v-card-actions>
@@ -47,15 +47,14 @@
       </v-row>
       <v-divider></v-divider>
       <v-row >
-        <v-col cols="12" sm="4" v-for="todo in todos" :key="todo.id">
+        <!-- <v-col cols="12" sm="4" v-for="todo in todos" :key="todo.id">
         <v-card class="mx-auto" max-width="344" color="#385F73" dark>
           <v-card-title class="headline">{{todo.taskName}}</v-card-title>
           <v-card-subtitle>{{ todo.Description }}</v-card-subtitle>
           <v-card-actions>
-            <!-- <v-btn text>Set As Complete</v-btn> -->
           </v-card-actions>
         </v-card>
-        </v-col>
+        </v-col> -->
       </v-row>
     </v-container>
   </v-container>
@@ -63,7 +62,7 @@
 
 <script>
 import AddTodo from "@/components/AddTodo";
-import { mapActions,mapGetters } from "vuex";
+import { mapActions,mapGetters,mapMutations } from "vuex";
 export default {
   name: "Dashboard",
   components: {
@@ -77,28 +76,22 @@ export default {
   methods: {
     ...mapActions({
       fetchTodo : 'todo/fetchTodo'
-    })
-  },
-  watch : {
-    todos(newValue){
-      this.todos = [...newValue];
-    }
+    }),
+    ...mapMutations(['SET_MESSAGE'])
   },
   computed : {
     ...mapGetters({
       getTodos : 'todo/getTodos'
-    }),
-    todos : {
-      set(){
-        this.todos = this.getTodos();
-      }
-    }
+    })
   },
   async created(){
     try {
       await this.fetchTodo();
     } catch (error) {
-        console.log(error);
+      this.SET_MESSAGE({
+        message : error.toString(),
+        type : "error"
+      });
     }
   }
 };

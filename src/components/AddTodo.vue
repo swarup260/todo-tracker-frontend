@@ -12,7 +12,13 @@
           <v-switch v-model="inputUser.status" class="ma-2" label="Status"></v-switch>
         </v-col>
         <v-col lg="6">
-          <v-dialog ref="dialog" v-model="modal" :return-value.sync="inputUser.deadline" persistent width="290px">
+          <v-dialog
+            ref="dialog"
+            v-model="modal"
+            :return-value.sync="inputUser.deadline"
+            persistent
+            width="290px"
+          >
             <template v-slot:activator="{ on, attrs }">
               <v-text-field
                 v-model="inputUser.deadline"
@@ -31,7 +37,7 @@
         </v-col>
       </v-row>
       <v-row class="mb-6" justify="center" no-gutters>
-        <v-btn color="success" class="ml-3" block  type="submit">Add</v-btn>
+        <v-btn color="success" class="ml-3" block type="submit">Add</v-btn>
       </v-row>
     </v-form>
   </v-container>
@@ -39,9 +45,9 @@
 
 <script>
 import { rules } from "../utils/validation-rule";
-import { mapActions }  from 'vuex'
+import { mapActions } from "vuex";
 export default {
- data() {
+  data() {
     return {
       modal: false,
       inputRules: rules.inputRules,
@@ -53,15 +59,22 @@ export default {
       },
     };
   },
-  watch: {
-  },
+  watch: {},
   methods: {
     ...mapActions({
-      addTodo : 'todo/addTodo'
+      addTodo: "todo/addTodo",
     }),
-    submitTodo() {
+    async submitTodo() {
       if (this.$refs.addToDoForm.validate()) {
-        this.addTodo({ ...this.inputUser })
+        let result = await this.addTodo({ ...this.inputUser });
+        if (result) {
+          this.inputUser = {
+            taskName: "",
+            description: "",
+            status: false,
+            deadline: new Date().toISOString().substr(0, 10),
+          };
+        }
       }
     },
   },
