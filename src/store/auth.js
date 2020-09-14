@@ -95,6 +95,7 @@ export default ({
       try {
         let response = await axios.get(endpoints.users.getUserData);
         commit("SET_USER" , response.data.data);
+        storeData('user', response.data.data);
       } catch (error) {
         commit("SET_MESSAGE", {
           message: error.response.data.message,

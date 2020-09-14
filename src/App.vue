@@ -2,6 +2,8 @@
   <v-app>
     <v-app-bar app color="dark" dark>
       <h1>Todo !</h1>
+      <v-spacer></v-spacer>
+      <span v-if="user">{{ user.username }}</span>
     </v-app-bar>
 
     <v-main>
@@ -19,22 +21,31 @@
 
 <script>
 import { mapState } from "vuex";
+import { getData } from "@/utils/localStorage";
 export default {
   data: () => ({
     snackbar: false,
     snackbarColor: "error",
   }),
   watch: {
-    message(newValue, oldValue){
-      console.log(newValue.type);
-      console.log(oldValue.type);
+    message(newValue) {
       if (newValue) {
         this.snackbarColor = newValue.type;
         this.snackbar = true;
       }
+    },
+  },
+  computed: {
+    ...mapState({
+      message : state => state.message,
+      user : state => state.auth.user
+    }),
+    user : {
+      get(){
+         return getData('user');
+      }
     }
   },
-  computed: mapState(['message' ,'user']),
   beforeDestroy() {
     this.unwatch();
   },
