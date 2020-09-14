@@ -27,6 +27,10 @@ export default {
         let response = await axios.post(endpoints.todos.todos, task);
         if (response.status == 200) {
           dispatch("processTodo", response.data.data);
+          let todos = getData("Todos");
+          todos.push(response.data.data)
+          storeData("Todos",todos);
+          commit("SET_TODOS",todos);
           commit(
             "SET_MESSAGE",
             {
@@ -59,20 +63,22 @@ export default {
     async fetchTodo({ commit }) {
       try {
         let todos = getData("Todos");
-        if (todos) {
-          commit("SET_TODOS", todos.data);
+        if (todos.constructor.name == "Array" && todos.length  > 0) {
+          console.log(todos);
+          commit("SET_TODOS", todos);
           storeData("Todos", todos);
           return true;
         }
         let response = await axios.get(endpoints.todos.todos);
         commit("SET_TODOS", response.data.data);
-        storeData("Todos", response.data);
+        storeData("Todos", response.data.data);
         return true;
       } catch (error) {
+        console.log(error);
         commit(
           "SET_MESSAGE",
           {
-            message: error.response.data.message,
+            message: error.toString(),
             type: "error",
           },
           {
@@ -85,6 +91,19 @@ export default {
       try {
         let response = await axios.patch(endpoints.todos.todos,updateData);
         if (response.status == 200) {
+
+          /* update the set and localstorage */
+          const id = response.data.data._id;
+          const todos = getData("Todos");
+          for (let index = 0; index < todos.length; index++) {
+              if (todos[index]._id == id) {
+                todos[index] = response.data.data;
+              }
+          }
+          storeData("Todos",todos);
+          commit("SET_TODOS",todos);
+
+          /* set the messages */
           commit("SET_MESSAGE", {
             message: response.data.message,
             type: "success"

@@ -12,7 +12,11 @@ const storeData = (key , value) => {
  * @param {String} key 
  */
 const getData = (key) => {
-    return JSON.parse(localStorage.getItem(key)) ?? null;
+    try {
+        return JSON.parse(localStorage.getItem(key)) ?? null;
+    } catch (error) {
+        return null;
+    }
 }
 
 /**

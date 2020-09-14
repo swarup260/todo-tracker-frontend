@@ -25,18 +25,46 @@
       <v-icon dark>mdi-plus</v-icon>
     </v-btn>
     <v-container>
+      <!-- UPDATE TODO MODAL -->
+      <v-dialog v-model="updateDialog" max-width="500px">
+        <v-card>
+          <v-card-title>Update Todo</v-card-title>
+          <v-card-text>
+            <UpdateTodo v-model="updateDialog" :inputUser.sync="todo" />
+          </v-card-text>
+          <v-card-actions>
+            <v-btn color="primary" text @click="updateDialog = false">Close</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <!-- END UPDATE TODO MODAL -->
       <v-row>
-        <v-col cols="12" sm="4" v-for="todo in getTodos" :key="todo._id">
-          <v-card class="mx-auto" max-width="344" color="#385F73" dark>
-            <v-card-title class="headline">{{todo.taskName}}</v-card-title>
-            <v-card-subtitle>DeadLine : {{ new Date(todo.deadline).toLocaleDateString() }}</v-card-subtitle>
-            <v-card-text>
-              <div class="text--primary">{{ todo.description }}</div>
-            </v-card-text>
-            <v-card-actions>
-              <v-btn @click="updateStatusTodo(todo._id)" text>Mark As Complete</v-btn>
-            </v-card-actions>
-          </v-card>
+        <v-col cols="12" sm="4" lg="3" v-for="todo in getCompleteTask" :key="todo._id">
+          <v-hover v-slot:default="{ hover }">
+            <v-card
+              class="mx-auto"
+              max-width="344"
+              color="#385F73"
+              dark
+              :elevation="hover ? 20 : 2"
+              :class="{ 'on-hover': hover }"
+            >
+              <v-card-title class="headline">{{todo.taskName}}</v-card-title>
+              <v-card-subtitle>DeadLine : {{ new Date(todo.deadline).toLocaleDateString() }}</v-card-subtitle>
+              <v-card-text>
+                <div class="text--primary">{{ todo.description }}</div>
+              </v-card-text>
+              <v-card-actions>
+                <v-btn @click="updateStatusTodo(todo._id)" text>Mark As Complete</v-btn>
+                <v-btn
+                  :class="{ 'show-btns': hover }"
+                  color="transparent"
+                  @click="updateDescpTodo(todo)"
+                  text
+                >Update</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-hover>
         </v-col>
       </v-row>
       <v-spacer class="mb-16"></v-spacer>
@@ -45,14 +73,29 @@
       </v-row>
       <v-divider></v-divider>
       <v-row>
-        <!-- <v-col cols="12" sm="4" v-for="todo in todos" :key="todo.id">
-        <v-card class="mx-auto" max-width="344" color="#385F73" dark>
-          <v-card-title class="headline">{{todo.taskName}}</v-card-title>
-          <v-card-subtitle>{{ todo.Description }}</v-card-subtitle>
-          <v-card-actions>
-          </v-card-actions>
-        </v-card>
-        </v-col>-->
+        <v-col cols="12" sm="4" lg="3" v-for="todo in getInCompleteTask" :key="todo.id">
+          <v-hover v-slot:default="{ hover }">
+            <v-card
+              class="mx-auto"
+              max-width="344"
+              color="green"
+              :elevation="hover ? 20 : 2"
+              :class="{ 'on-hover': hover }"
+              dark
+            >
+              <v-card-title class="headline">{{todo.taskName}}</v-card-title>
+              <v-card-subtitle>{{ todo.description }}</v-card-subtitle>
+              <v-card-actions>
+                <v-btn
+                  :class="{ 'show-btns': hover }"
+                  color="transparent"
+                  @click="updateDescpTodo(todo)"
+                  text
+                >Update</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-hover>
+        </v-col>
       </v-row>
     </v-container>
   </v-container>
@@ -60,15 +103,19 @@
 
 <script>
 import AddTodo from "@/components/AddTodo";
+import UpdateTodo from "@/components/UpdateTodo";
 import { mapActions, mapGetters, mapMutations } from "vuex";
 export default {
   name: "Dashboard",
   components: {
     AddTodo,
+    UpdateTodo
   },
   data() {
     return {
       dialog: false,
+      updateDialog : false,
+      todo : {}
     };
   },
   methods: {
@@ -79,17 +126,28 @@ export default {
     ...mapMutations(["SET_MESSAGE"]),
     updateStatusTodo(id) {
       this.updateTodo({
-        id : id,
-        update : {
-          status : true
-        }
+        id: id,
+        update: {
+          status: true,
+        },
       });
     },
+    updateDescpTodo(data){
+      this.updateDialog = true;
+      this.todo = data;
+      console.log(data);
+    }
   },
   computed: {
     ...mapGetters({
       getTodos: "todo/getTodos",
     }),
+    getCompleteTask() {
+      return this.getTodos.filter((item) => !item.status);
+    },
+    getInCompleteTask() {
+      return this.getTodos.filter((item) => item.status);
+    },
   },
   async created() {
     try {
@@ -103,3 +161,14 @@ export default {
   },
 };
 </script>
+<style scoped>
+/* .v-card {
+  transition: opacity .4s ease-in-out;
+}
+.v-card:not(.on-hover) {
+  opacity: 0.6;
+ } */
+.show-btns {
+  color: rgba(255, 255, 255, 1) !important;
+}
+</style>
