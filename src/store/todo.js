@@ -3,7 +3,7 @@ import {
   endpoints
 } from "../api/urls";
 
-// import {storeData} from '../utils/localStorage';
+import {storeData} from '../utils/localStorage';
 
 export default ({
   namespaced: true,
@@ -15,7 +15,15 @@ export default ({
     ADD_TODO(state, todos) {
       state.todos.push(todos);
     },
+    SET_TODOS(state , todos){
+      state.todos.push(todos);
+    }
 
+  },
+  getters : {
+    getTodos(state){
+        return state.todos;
+    }
   },
   actions: {
     async addTodo({
@@ -37,6 +45,12 @@ export default ({
     }, todo) {
       commit("ADD_TODO", todo);
     //   storeData('todos',todo);
+    },
+    async fetchTodo({commit}){
+      let response = await axios.get(endpoints.todos.todos);
+      commit("SET_TODOS" , response.data.data);
+      storeData("Todos",response.data);
+      return response.data.data;
     }
   }
 })

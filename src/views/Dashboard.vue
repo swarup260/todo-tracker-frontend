@@ -63,6 +63,7 @@
 
 <script>
 import AddTodo from "@/components/AddTodo";
+import { mapActions,mapGetters } from "vuex";
 export default {
   name: "Dashboard",
   components: {
@@ -70,45 +71,35 @@ export default {
   },
   data() {
     return {
-      dialog: false,
-      todos: [
-        {
-          id: 1,
-          taskName: "Programming",
-          Description: "learning C#",
-          status: false,
-          deadline: new Date().toLocaleDateString(),
-        },
-        {
-          id: 2,
-          taskName: "Programming python",
-          Description: "learning C#",
-          status: true,
-          deadline: new Date().toLocaleDateString(),
-        },
-        {
-          id: 3,
-          taskName: "Programming Dart",
-          Description: "learning C#",
-          status: false,
-          deadline: new Date().toLocaleDateString(),
-        },
-        {
-          id: 4,
-          taskName: "Programming Javascript",
-          Description: "learning C#",
-          status: false,
-          deadline: new Date().toLocaleDateString(),
-        },
-        {
-          id: 5,
-          taskName: "Programming",
-          Description: "learning C#",
-          status: false,
-          deadline: new Date().toLocaleDateString(),
-        },
-      ],
+      dialog: false
     };
   },
+  methods: {
+    ...mapActions({
+      fetchTodo : 'todo/fetchTodo'
+    })
+  },
+  watch : {
+    todos(newValue){
+      this.todos = [...newValue];
+    }
+  },
+  computed : {
+    ...mapGetters({
+      getTodos : 'todo/getTodos'
+    }),
+    todos : {
+      set(){
+        this.todos = this.getTodos();
+      }
+    }
+  },
+  async created(){
+    try {
+      await this.fetchTodo();
+    } catch (error) {
+        console.log(error);
+    }
+  }
 };
 </script>
