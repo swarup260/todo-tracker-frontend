@@ -81,5 +81,29 @@ export default {
         );
       }
     },
+    async updateTodo ({ commit } , updateData){
+      try {
+        let response = await axios.patch(endpoints.todos.todos,updateData);
+        if (response.status == 200) {
+          commit("SET_MESSAGE", {
+            message: response.data.message,
+            type: "success"
+          }, {
+            root: true
+          });
+        }
+      } catch (error) {
+        commit(
+          "SET_MESSAGE",
+          {
+            message: error.response.data.message,
+            type: "error",
+          },
+          {
+            root: true,
+          }
+        );
+      }
+    }
   },
 };

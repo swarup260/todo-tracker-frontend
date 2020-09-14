@@ -59,6 +59,7 @@ export default {
       },
     };
   },
+  props: ["value"],
   watch: {},
   methods: {
     ...mapActions({
@@ -74,6 +75,7 @@ export default {
             status: false,
             deadline: new Date().toISOString().substr(0, 10),
           };
+          this.$emit("input", false);
         }
       }
     },

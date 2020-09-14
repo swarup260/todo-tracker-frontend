@@ -31,6 +31,7 @@ export default ({
       try {
         let response = await axios.post(endpoints.users.login, credentials);
         if (response.status == 200 && response.data.token) {
+          storeData('userLogin', credentials);
           dispatch('setToken', response.data);
           return true;
         } else {
@@ -58,6 +59,7 @@ export default ({
     }, credentials) {
       try {
         let response = await axios.post(endpoints.users.register, credentials);
+        storeData('userLogin', credentials);
         if (response.status == 200 && response.data.token) {
           dispatch('setToken', response.data);
           return true;
