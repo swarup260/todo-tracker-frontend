@@ -3,7 +3,10 @@
     <v-app-bar app color="dark" dark>
       <h1>Todo !</h1>
       <v-spacer></v-spacer>
-      <span v-if="user">{{ user.username }}</span>
+      <span v-if="user" class="flex-row d-flex">
+      <span>{{ user.username }}</span>
+      <span class="material-icons ml-3" @click="logout">login</span>
+      </span>
     </v-app-bar>
 
     <v-main>
@@ -20,8 +23,8 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import { getData } from "@/utils/localStorage";
+import { mapState, mapActions } from "vuex";
+import { getData, clearData } from "@/utils/localStorage";
 export default {
   data: () => ({
     snackbar: false,
@@ -37,17 +40,27 @@ export default {
   },
   computed: {
     ...mapState({
-      message : state => state.message,
-      user : state => state.auth.user
+      message: (state) => state.message,
+      user: (state) => state.auth.user,
     }),
-    user : {
-      get(){
-         return getData('user');
-      }
-    }
+    user: {
+      get() {
+        return getData("user");
+      },
+    },
   },
   beforeDestroy() {
     this.unwatch();
+  },
+  methods: {
+    ...mapActions({
+      resetGlobalState: "resetGlobalState",
+    }),
+    logout() {
+      this.resetGlobalState();
+      clearData();
+      this.$router.push("/");
+    },
   },
 };
 </script>

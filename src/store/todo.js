@@ -3,17 +3,23 @@ import { endpoints } from "../api/urls";
 
 import { storeData, getData } from "../utils/localStorage";
 
+const defaultState = {
+  todos: [],
+};
+
 export default {
   namespaced: true,
-  state: {
-    todos: [],
-  },
+  state: defaultState,
   mutations: {
     ADD_TODO(state, todos) {
       state.todos.unshift(todos);
     },
     SET_TODOS(state, todos) {
       state.todos = todos;
+    },
+    RESET_STATE(state) {
+      state = defaultState;
+      console.log(state);
     },
   },
   getters: {
@@ -28,9 +34,9 @@ export default {
         if (response.status == 200) {
           dispatch("processTodo", response.data.data);
           let todos = getData("Todos");
-          todos.push(response.data.data)
-          storeData("Todos",todos);
-          commit("SET_TODOS",todos);
+          todos.push(response.data.data);
+          storeData("Todos", todos);
+          commit("SET_TODOS", todos);
           commit(
             "SET_MESSAGE",
             {
@@ -63,7 +69,7 @@ export default {
     async fetchTodo({ commit }) {
       try {
         let todos = getData("Todos");
-        if (todos.constructor.name == "Array" && todos.length  > 0) {
+        if (todos && todos.constructor.name == "Array" && todos.length > 0) {
           console.log(todos);
           commit("SET_TODOS", todos);
           storeData("Todos", todos);
@@ -87,29 +93,32 @@ export default {
         );
       }
     },
-    async updateTodo ({ commit } , updateData){
+    async updateTodo({ commit }, updateData) {
       try {
-        let response = await axios.patch(endpoints.todos.todos,updateData);
+        let response = await axios.patch(endpoints.todos.todos, updateData);
         if (response.status == 200) {
-
           /* update the set and localstorage */
           const id = response.data.data._id;
           const todos = getData("Todos");
           for (let index = 0; index < todos.length; index++) {
-              if (todos[index]._id == id) {
-                todos[index] = response.data.data;
-              }
+            if (todos[index]._id == id) {
+              todos[index] = response.data.data;
+            }
           }
-          storeData("Todos",todos);
-          commit("SET_TODOS",todos);
+          storeData("Todos", todos);
+          commit("SET_TODOS", todos);
 
           /* set the messages */
-          commit("SET_MESSAGE", {
-            message: response.data.message,
-            type: "success"
-          }, {
-            root: true
-          });
+          commit(
+            "SET_MESSAGE",
+            {
+              message: response.data.message,
+              type: "success",
+            },
+            {
+              root: true,
+            }
+          );
         }
       } catch (error) {
         commit(
@@ -123,6 +132,45 @@ export default {
           }
         );
       }
+    },
+    async deleteTodo({ commit }, id) {
+      try {
+        let response = await axios.delete(`${endpoints.todos.todos}/${id}`);
+        if (response.status == 200) {
+          /* update the set and localstorage */
+          const todos = getData("Todos");
+          const filterTodos = todos.filter((item) => item._id != id);
+          storeData("Todos", filterTodos);
+          commit("SET_TODOS", filterTodos);
+
+          /* set the messages */
+          commit(
+            "SET_MESSAGE",
+            {
+              message: response.data.message,
+              type: "success",
+            },
+            {
+              root: true,
+            }
+          );
+        }
+      } catch (error) {
+        console.error(error);
+        commit(
+          "SET_MESSAGE",
+          {
+            message: error.response.data.message,
+            type: "error",
+          },
+          {
+            root: true,
+          }
+        );
+      }
+    },
+    resetTodoState({commit}){
+      commit("RESET_STATE")
     }
   },
 };

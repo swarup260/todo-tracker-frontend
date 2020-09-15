@@ -6,10 +6,11 @@ import vuetify from "./plugins/vuetify";
 import axios from "axios";
 import { BASE_URL } from "./api/urls";
 import { getData } from "./utils/localStorage";
+import '@/store/subscribers';
 
 /* Set Axios Default Setting */
 axios.defaults.baseURL = BASE_URL;
-axios.defaults.headers.common["Authorization"] = `Bearer ${getData("token")}`;
+
 axios.interceptors.response.use(
   function(response) {
     // Any status code that lie within the range of 2xx cause this function to trigger

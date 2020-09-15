@@ -26,9 +26,17 @@ const getData = (key) => {
 const removeData = (key) => {
     localStorage.removeItem(key);
 }
+/**
+ * 
+ * 
+ */
+const clearData = () => {
+    localStorage.clear();
+}
 
 export {
     storeData,
     getData,
-    removeData
+    removeData,
+    clearData
 }

@@ -49,7 +49,14 @@
               :elevation="hover ? 20 : 2"
               :class="{ 'on-hover': hover }"
             >
-              <v-card-title class="headline">{{todo.taskName}}</v-card-title>
+              <v-card-title class="headline">
+                {{todo.taskName}}
+                <span
+                  :class="{ 'show-delete-action': hover }"
+                  class="material-icons position-delete-action pa-2"
+                  @click="deleteTodoComponent(todo._id)"
+                >delete</span>
+              </v-card-title>
               <v-card-subtitle>DeadLine : {{ new Date(todo.deadline).toLocaleDateString() }}</v-card-subtitle>
               <v-card-text>
                 <div class="text--primary">{{ todo.description }}</div>
@@ -83,7 +90,14 @@
               :class="{ 'on-hover': hover }"
               dark
             >
-              <v-card-title class="headline">{{todo.taskName}}</v-card-title>
+              <v-card-title class="headline">
+                {{todo.taskName}}
+                <span
+                  :class="{ 'show-delete-action': hover }"
+                  class="material-icons position-delete-action pa-2"
+                  @click="deleteTodoComponent(todo._id)"
+                >delete</span>
+              </v-card-title>
               <v-card-subtitle>{{ todo.description }}</v-card-subtitle>
               <v-card-actions>
                 <v-btn
@@ -109,19 +123,20 @@ export default {
   name: "Dashboard",
   components: {
     AddTodo,
-    UpdateTodo
+    UpdateTodo,
   },
   data() {
     return {
       dialog: false,
-      updateDialog : false,
-      todo : {}
+      updateDialog: false,
+      todo: {},
     };
   },
   methods: {
     ...mapActions({
       fetchTodo: "todo/fetchTodo",
       updateTodo: "todo/updateTodo",
+      deleteTodo: "todo/deleteTodo",
     }),
     ...mapMutations(["SET_MESSAGE"]),
     updateStatusTodo(id) {
@@ -132,11 +147,15 @@ export default {
         },
       });
     },
-    updateDescpTodo(data){
+    updateDescpTodo(data) {
       this.updateDialog = true;
       this.todo = data;
       console.log(data);
-    }
+    },
+    deleteTodoComponent(id) {
+      console.log(id);
+      this.deleteTodo(id);
+    },
   },
   computed: {
     ...mapGetters({
@@ -170,5 +189,15 @@ export default {
  } */
 .show-btns {
   color: rgba(255, 255, 255, 1) !important;
+}
+.position-delete-action {
+  position: absolute;
+  right: 0;
+  top: 0;
+  font-size: 20px;
+  opacity: 0;
+}
+.show-delete-action {
+  opacity: 1;
 }
 </style>

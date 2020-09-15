@@ -8,26 +8,21 @@
           <v-switch v-model="inputUser.status" class="ma-2" label="Status"></v-switch>
         </v-col>
         <v-col lg="6">
-          <v-dialog
-            ref="dialog"
-            v-model="modal"
-            :return-value.sync="inputUser.deadline"
-            persistent
-            width="290px"
-          >
+          <v-dialog ref="updatedialog" v-model="updatemodal" :return-value.sync="deadline" persistent width="290px">
             <template v-slot:activator="{ on, attrs }">
               <v-text-field
-                v-model="inputUser.deadline"
+                v-model="deadline"
                 label="Set A Deadline"
+                prepend-icon="event"
                 readonly
                 v-bind="attrs"
                 v-on="on"
               ></v-text-field>
             </template>
-            <v-date-picker v-model="inputUser.deadline" scrollable>
+            <v-date-picker v-model="deadline" scrollable>
               <v-spacer></v-spacer>
-              <v-btn text color="primary" @click="modal = false">Cancel</v-btn>
-              <v-btn text color="primary" @click="$refs.dialog.save(inputUser.deadline)">OK</v-btn>
+              <v-btn text color="primary" @click="updatemodal = false">Cancel</v-btn>
+              <v-btn text color="primary" @click="$refs.updatedialog.save(deadline)">OK</v-btn>
             </v-date-picker>
           </v-dialog>
         </v-col>
@@ -49,9 +44,21 @@ export default {
   },
   data() {
     return {
-      modal: false,
+      updatemodal: false,
       inputRules: rules.inputRules,
     };
+  },
+  computed: {
+    deadline : {
+      get(){
+        console.log(this.$props.inputUser.deadline);
+        return new Date(this.$props.inputUser.deadline).toISOString().substr(0, 10);
+      },
+      set(newValue){
+        this.$props.inputUser.deadline = newValue;
+        console.log(this.$props.inputUser.deadline);
+      }
+    },
   },
   methods: {
     ...mapActions({
