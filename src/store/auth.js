@@ -1,7 +1,12 @@
 import axios from "axios";
-import { endpoints } from "../api/urls";
+import {
+  endpoints
+} from "../api/urls";
 
-import { storeData } from "../utils/localStorage";
+import {
+  storeData,
+  getData
+} from "../utils/localStorage";
 
 const defaultState = {
   token: null,
@@ -23,8 +28,19 @@ export default {
       console.log(state);
     },
   },
+  getters: {
+    getUser(state) {
+      if (getData('user')) {
+        return getData('user');
+      }
+      return state.user;
+    },
+  },
   actions: {
-    async login({ commit, dispatch }, credentials) {
+    async login({
+      commit,
+      dispatch
+    }, credentials) {
       try {
         let response = await axios.post(endpoints.users.login, credentials);
         if (response.status == 200 && response.data.token) {
@@ -33,12 +49,10 @@ export default {
           return true;
         } else {
           commit(
-            "SET_MESSAGE",
-            {
+            "SET_MESSAGE", {
               message: "Invalid Request",
               type: "error",
-            },
-            {
+            }, {
               root: true,
             }
           );
@@ -47,18 +61,19 @@ export default {
       } catch (error) {
         // { root: true } to access the global mutations
         commit(
-          "SET_MESSAGE",
-          {
+          "SET_MESSAGE", {
             message: error.response.data.message,
             type: "error",
-          },
-          {
+          }, {
             root: true,
           }
         );
       }
     },
-    async register({ commit, dispatch }, credentials) {
+    async register({
+      commit,
+      dispatch
+    }, credentials) {
       try {
         let response = await axios.post(endpoints.users.register, credentials);
         storeData("userLogin", credentials);
@@ -67,12 +82,10 @@ export default {
           return true;
         } else {
           commit(
-            "SET_MESSAGE",
-            {
+            "SET_MESSAGE", {
               message: "Invalid Request",
               type: "error",
-            },
-            {
+            }, {
               root: true,
             }
           );
@@ -81,27 +94,25 @@ export default {
       } catch (error) {
         // { root: true } to access the global mutations
         commit(
-          "SET_MESSAGE",
-          {
+          "SET_MESSAGE", {
             message: error.response.data.message,
             type: "error",
-          },
-          {
+          }, {
             root: true,
           }
         );
       }
     },
-    async setToken({ commit }, data) {
+    async setToken({
+      commit
+    }, data) {
       commit("SET_TOKEN", data.token);
       storeData("token", data.token);
       commit(
-        "SET_MESSAGE",
-        {
+        "SET_MESSAGE", {
           message: data.message,
           type: "success",
-        },
-        {
+        }, {
           root: true,
         }
       );
@@ -112,18 +123,18 @@ export default {
         storeData("user", response.data.data);
       } catch (error) {
         commit(
-          "SET_MESSAGE",
-          {
+          "SET_MESSAGE", {
             message: error.response.data.message,
             type: "error",
-          },
-          {
+          }, {
             root: true,
           }
         );
       }
     },
-    resetAuthState({ commit }) {
+    resetAuthState({
+      commit
+    }) {
       commit("RESET_STATE");
     },
   },

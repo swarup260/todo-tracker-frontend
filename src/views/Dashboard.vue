@@ -49,7 +49,7 @@
               :elevation="hover ? 20 : 2"
               :class="{ 'on-hover': hover }"
             >
-              <v-card-title class="headline">
+              <v-card-title class="headline text-truncate d-inline-block" style="max-width: 250px;">
                 {{todo.taskName}}
                 <span
                   :class="{ 'show-delete-action': hover }"
@@ -75,10 +75,10 @@
         </v-col>
       </v-row>
       <v-spacer class="mb-16"></v-spacer>
-      <v-row>
+      <v-row :class="{ 'hide-div': getInCompleteTask.length == 0  }">
         <h4>Complete Task</h4>
+        <v-divider></v-divider>
       </v-row>
-      <v-divider></v-divider>
       <v-row>
         <v-col cols="12" sm="4" lg="3" v-for="todo in getInCompleteTask" :key="todo.id">
           <v-hover v-slot:default="{ hover }">
@@ -190,12 +190,16 @@ export default {
 .show-btns {
   color: rgba(255, 255, 255, 1) !important;
 }
+.hide-div {
+  display: none;
+}
 .position-delete-action {
   position: absolute;
   right: 0;
   top: 0;
   font-size: 20px;
   opacity: 0;
+  cursor: pointer;
 }
 .show-delete-action {
   opacity: 1;

@@ -3,9 +3,14 @@
     <v-app-bar app color="dark" dark>
       <h1>Todo !</h1>
       <v-spacer></v-spacer>
-      <span v-if="user" class="flex-row d-flex">
-      <span>{{ user.username }}</span>
-      <span class="material-icons ml-3" @click="logout">login</span>
+      <span v-if="getUser.username" class="flex-row d-flex">
+        <span>{{ getUser.username }}</span>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <span v-bind="attrs" v-on="on" class="material-icons ml-3 pointer" @click="logout">login</span>
+          </template>
+          <span>Login</span>
+        </v-tooltip>
       </span>
     </v-app-bar>
 
@@ -23,8 +28,8 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
-import { getData, clearData } from "@/utils/localStorage";
+import { mapState, mapActions, mapGetters } from "vuex";
+import { clearData } from "@/utils/localStorage";
 export default {
   data: () => ({
     snackbar: false,
@@ -41,13 +46,10 @@ export default {
   computed: {
     ...mapState({
       message: (state) => state.message,
-      user: (state) => state.auth.user,
     }),
-    user: {
-      get() {
-        return getData("user");
-      },
-    },
+    ...mapGetters({
+      getUser: "auth/getUser",
+    }),
   },
   beforeDestroy() {
     this.unwatch();
@@ -64,4 +66,8 @@ export default {
   },
 };
 </script>
-
+<style lang="css" scoped>
+.pointer {
+  cursor: pointer;
+}
+</style>
