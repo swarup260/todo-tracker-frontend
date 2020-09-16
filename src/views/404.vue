@@ -1,6 +1,7 @@
 <template>
-  <v-container>
-    <h1 class="text-center">404</h1>
+  <v-container class="text-center">
+    <h1>404</h1>
+    <h2 class="red--text">PAGE NO FOUND !</h2>
   </v-container>
 </template>
 
@@ -10,6 +11,6 @@ export default {};
 
 <style lang="css" scoped>
 h1 {
-    font-size: 25rem;
+    font-size: 20rem;
 }
 </style>>
