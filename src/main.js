@@ -24,8 +24,7 @@ axios.interceptors.response.use(
         router.push("/");
       }
       store.dispatch("auth/login",getData('userLogin'));
-      axios.defaults.headers.common["Authorization"] = `Bearer ${getData("token")}`;
-      // return axios(error.config);
+      return axios(error.config);
     }
 
     return Promise.reject(error);
