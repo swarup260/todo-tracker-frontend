@@ -39,7 +39,7 @@
       </v-dialog>
       <!-- END UPDATE TODO MODAL -->
       <v-row>
-        <v-col cols="12" sm="4" lg="3" v-for="todo in getCompleteTask" :key="todo._id">
+        <v-col cols="12" sm="4" lg="3" v-for="todo in completeTask" :key="todo._id">
           <v-hover v-slot:default="{ hover }">
             <v-card
               class="mx-auto"
@@ -75,12 +75,12 @@
         </v-col>
       </v-row>
       <v-spacer class="mb-16"></v-spacer>
-      <v-row :class="{ 'hide-div': getInCompleteTask.length == 0  }">
+      <v-row :class="{ 'hide-div': inCompleteTask.length == 0  }">
         <h4>Complete Task</h4>
         <v-divider></v-divider>
       </v-row>
       <v-row>
-        <v-col cols="12" sm="4" lg="3" v-for="todo in getInCompleteTask" :key="todo.id">
+        <v-col cols="12" sm="4" lg="3" v-for="todo in inCompleteTask" :key="todo.id">
           <v-hover v-slot:default="{ hover }">
             <v-card
               class="mx-auto"
@@ -159,14 +159,9 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getTodos: "todo/getTodos",
-    }),
-    getCompleteTask() {
-      return this.getTodos.filter((item) => !item.status);
-    },
-    getInCompleteTask() {
-      return this.getTodos.filter((item) => item.status);
-    },
+      completeTask: "todo/completeTask",
+      inCompleteTask: "todo/inCompleteTask",
+    })
   },
   async created() {
     try {

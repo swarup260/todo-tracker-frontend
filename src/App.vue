@@ -3,8 +3,8 @@
     <v-app-bar app color="dark" dark>
       <h1>Todo !</h1>
       <v-spacer></v-spacer>
-      <span v-if="getUser.username" class="flex-row d-flex">
-        <span>{{ getUser.username }}</span>
+      <span v-if="user.username" class="flex-row d-flex">
+        <span>{{ user.username }}</span>
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
             <span v-bind="attrs" v-on="on" class="material-icons ml-3 pointer" @click="logout">login</span>
@@ -41,7 +41,7 @@ export default {
         this.snackbarColor = newValue.type;
         this.snackbar = true;
       }
-    },
+    }
   },
   computed: {
     ...mapState({
@@ -50,6 +50,9 @@ export default {
     ...mapGetters({
       getUser: "auth/getUser",
     }),
+    user(){
+      return this.getUser;
+    }
   },
   beforeDestroy() {
     this.unwatch();
@@ -61,7 +64,7 @@ export default {
     logout() {
       this.resetGlobalState();
       clearData();
-      this.$router.push("/");
+      this.$router.push('/');
     },
   },
 };
