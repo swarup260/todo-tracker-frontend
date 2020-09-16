@@ -15,7 +15,14 @@
     </v-app-bar>
 
     <v-main>
-      <v-snackbar v-model="snackbar" right top timeout="5000" :color="snackbarColor">
+      <v-snackbar
+        v-model="snackbar"
+        right
+        top
+        timeout="5000"
+        :color="snackbarColor"
+        v-if="message.message"
+      >
         {{ message.message }}
         <template v-slot:action="{ attrs }">
           <v-btn color="white" text v-bind="attrs" @click="snackbar = false">Close</v-btn>
@@ -41,7 +48,7 @@ export default {
         this.snackbarColor = newValue.type;
         this.snackbar = true;
       }
-    }
+    },
   },
   computed: {
     ...mapState({
@@ -50,9 +57,9 @@ export default {
     ...mapGetters({
       getUser: "auth/getUser",
     }),
-    user(){
+    user() {
       return this.getUser;
-    }
+    },
   },
   beforeDestroy() {
     this.unwatch();
@@ -62,9 +69,9 @@ export default {
       resetGlobalState: "resetGlobalState",
     }),
     logout() {
-      this.resetGlobalState();
       clearData();
-      this.$router.push('/');
+      this.resetGlobalState();
+      this.$router.push("/");
     },
   },
 };
