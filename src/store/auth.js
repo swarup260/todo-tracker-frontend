@@ -26,7 +26,7 @@ export default {
   getters: {
     getUser(state) {
       if (getData("user")) {
-        return getData("user");
+        state.user =  getData("user");
       }
       return state.user;
     },
