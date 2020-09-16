@@ -18,13 +18,15 @@ export default {
       state.todos = todos;
     },
     RESET_STATE(state) {
-      state = defaultState;
-      console.log(state);
+      state.todos = [];
     },
   },
   getters: {
-    getTodos(state) {
-      return state.todos;
+    completeTask(state) {
+      return state.todos.filter((item) => !item.status);
+    },
+    inCompleteTask(state) {
+      return state.todos.filter((item) => item.status);
     },
   },
   actions: {

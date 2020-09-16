@@ -14,13 +14,13 @@ export default new Vuex.Store({
     SET_MESSAGE(state, message) {
       state.message = message;
     },
-    RESET_STATE(state,defaultState) {
-      state = defaultState;
+    RESET_STATE(state) {
+      state.message = {};
     },
   },
   actions: {
     resetGlobalState({ commit,dispatch }) {
-      commit("RESET_STATE",defaultState);
+      commit("RESET_STATE");
       dispatch("auth/resetAuthState",null , {root : true});
       dispatch("todo/resetTodoState",null,{root : true});
     },
