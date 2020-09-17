@@ -5,7 +5,8 @@
         <v-text-field v-model="inputUser.taskName" :rules="inputRules" label="Task Name" outlined></v-text-field>
       </v-row>
       <v-row class="mb-6" justify="center" no-gutters>
-        <v-textarea v-model="inputUser.description" label="Description" outlined></v-textarea>
+        <!-- <v-textarea v-model="inputUser.description" label="Description" outlined></v-textarea> -->
+          <editor-content class="editor-style" :editor="editor" />
       </v-row>
       <v-row class="mb-6" justify="center" no-gutters>
         <v-col lg="6">
@@ -46,7 +47,11 @@
 <script>
 import { rules } from "../utils/validation-rule";
 import { mapActions } from "vuex";
+import { Editor, EditorContent } from "tiptap";
 export default {
+  components: {
+    EditorContent,
+  },
   data() {
     return {
       modal: false,
@@ -57,6 +62,12 @@ export default {
         status: false,
         deadline: new Date().toISOString().substr(0, 10),
       },
+      editor: new Editor({
+        content: "<p>This is just a boring paragraph</p>",
+        onUpdate: ({ getHTML }) => {
+          console.log(getHTML());
+        },
+      }),
     };
   },
   props: ["value"],
@@ -67,21 +78,45 @@ export default {
     }),
     async submitTodo() {
       if (this.$refs.addToDoForm.validate()) {
-        let result = await this.addTodo({ ...this.inputUser });
-        if (result) {
-          this.inputUser = {
-            taskName: "",
-            description: "",
-            status: false,
-            deadline: new Date().toISOString().substr(0, 10),
-          };
-          this.$emit("input", false);
-        }
+        console.log(this.editor.content);
+        return;
+        // let result = await this.addTodo({ ...this.inputUser });
+        // if (result) {
+        //   this.inputUser = {
+        //     taskName: "",
+        //     description: "",
+        //     status: false,
+        //     deadline: new Date().toISOString().substr(0, 10),
+        //   };
+        //   this.$emit("input", false);
+        // }
       }
     },
+  },
+  beforeDestroy() {
+    // Always destroy your editor instance when it's no longer needed
+    this.editor.destroy();
   },
 };
 </script>
 
-<style>
+<style lang="css" scoped>
+.editor-style {
+  border: 2px solid black;
+  border-radius: 5px;
+  height: 100px;
+  padding: 0 12px;
+  display: flex;
+  flex-grow: 1;
+}
+.editor-style :focus {
+  outline: none;
+}
+.ProseMirror [contenteditable="false"] {
+  white-space: normal;
+}
+
+.ProseMirror [contenteditable="true"] {
+  white-space: pre-wrap;
+}
 </style>
