@@ -23,10 +23,10 @@ export default {
   },
   getters: {
     completeTask(state) {
-      return state.todos.filter((item) => !item.status);
+      return state.todos.filter((item) => item.status);
     },
     inCompleteTask(state) {
-      return state.todos.filter((item) => item.status);
+      return state.todos.filter((item) => !item.status);
     },
   },
   actions: {
