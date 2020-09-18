@@ -5,10 +5,10 @@
       <v-textarea v-model="inputUser.description" label="Description" outlined></v-textarea>
       <v-row class="mb-6" justify="center" no-gutters>
         <v-col lg="6">
-          <v-switch v-model="inputUser.status" class="ma-2" label="Status"></v-switch>
+          <v-switch v-model="switchStatus" class="ma-2" label="Status"></v-switch>
         </v-col>
         <v-col lg="6">
-          <v-dialog ref="updatedialog" v-model="updatemodal" :return-value.sync="deadline" persistent width="290px">
+          <v-dialog ref="updatedialog" v-model="datePickerModal" :return-value.sync="deadline" persistent width="290px">
             <template v-slot:activator="{ on, attrs }">
               <v-text-field
                 v-model="deadline"
@@ -21,7 +21,7 @@
             </template>
             <v-date-picker v-model="deadline" scrollable>
               <v-spacer></v-spacer>
-              <v-btn text color="primary" @click="updatemodal = false">Cancel</v-btn>
+              <v-btn text color="primary" @click="datePickerModal = false">Cancel</v-btn>
               <v-btn text color="primary" @click="$refs.updatedialog.save(deadline)">OK</v-btn>
             </v-date-picker>
           </v-dialog>
@@ -39,13 +39,13 @@ import { rules } from "../utils/validation-rule";
 import { mapActions } from "vuex";
 export default {
   props: {
-    inputUser: Object,
-    value: Boolean,
+    inputUser: Object
   },
   data() {
     return {
-      updatemodal: false,
+      datePickerModal: false,
       inputRules: rules.inputRules,
+      switchStatus: this.$props.inputUser.status
     };
   },
   computed: {
@@ -70,13 +70,13 @@ export default {
         this.updateTodo({
           id: userInput._id,
           update: {
-            status: userInput.status,
+            status: this.switchStatus,
             taskName: userInput.taskName,
             deadline: userInput.deadline,
             description: userInput.description,
           },
         });
-        this.$emit("input", false);
+        this.$emit("closeUpdateFormModel", false);
       }
     },
   },

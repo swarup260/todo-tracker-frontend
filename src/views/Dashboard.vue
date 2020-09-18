@@ -5,7 +5,7 @@
       <v-card>
         <v-card-title>Add New ToDo</v-card-title>
         <v-card-text>
-          <AddTodo v-model="dialog" />
+          <AddTodo @closeModel="modelClose"/>
         </v-card-text>
         <v-card-actions>
           <v-btn color="primary" text @click="dialog = false">Close</v-btn>
@@ -54,8 +54,7 @@ export default {
   name: "Dashboard",
   components: {
     AddTodo,
-    TodoCard,
-    draggable,
+    TodoCard
   },
   data() {
     return {
@@ -67,6 +66,9 @@ export default {
       fetchTodo: "todo/fetchTodo"
     }),
     ...mapMutations(["SET_MESSAGE"]),
+    modelClose(value){
+      this.dialog = value;
+    }
   },
   computed: {
     ...mapGetters({

@@ -1,14 +1,14 @@
 <template>
   <div>
     <!-- UPDATE TODO MODAL -->
-    <v-dialog v-model="updateDialog" max-width="500px">
-      <v-card @drag="dragTask">
+    <v-dialog v-model="updateDialog" persistent max-width="500px">
+      <v-card>
         <v-card-title>Update Todo</v-card-title>
         <v-card-text>
-          <UpdateTodo v-model="updateDialog" :inputUser.sync="todo" />
+          <UpdateTodo @closeUpdateFormModel="closeForm" :inputUser="updateTodoData" />
         </v-card-text>
         <v-card-actions>
-          <v-btn color="primary" text @click="updateDialog = false">Close</v-btn>
+          <v-btn color="primary" text @click.stop="updateDialog = false">Close</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -32,10 +32,10 @@
         </v-card-title>
         <v-card-subtitle>DeadLine : {{ new Date(todo.deadline).toLocaleDateString() }}</v-card-subtitle>
         <v-card-text>
-          <div class="text--primary">{{ todo.description }}</div>
+          <div class="text--primary text-truncate" style="max-width: 300px;">{{ todo.description }}</div>
         </v-card-text>
         <v-card-actions>
-          <v-btn @click="updateStatusTodo(todo._id)" text>Mark As Complete</v-btn>
+          <v-btn v-if="!todo.status" @click="updateStatusTodo(todo._id)" text>Mark As Complete</v-btn>
           <v-btn
             :class="{ 'show-btns': hover }"
             color="transparent"
@@ -52,8 +52,8 @@
 import UpdateTodo from "@/components/UpdateTodo";
 import { mapActions } from "vuex";
 export default {
-  components:{
-      UpdateTodo
+  components: {
+    UpdateTodo,
   },
   props: {
     todo: Object,
@@ -61,6 +61,7 @@ export default {
   data() {
     return {
       updateDialog: false,
+      updateTodoData: {},
     };
   },
   methods: {
@@ -77,20 +78,18 @@ export default {
       });
     },
     updateDescpTodo(data) {
+      this.updateTodoData = data;
       this.updateDialog = true;
-      this.todo = data;
-      console.log(data);
     },
     deleteTodoComponent(id) {
-      console.log(id);
       this.deleteTodo(id);
     },
-    getColor(status){
-        return status ? "green" : "red";
+    getColor(status) {
+      return status ? "green" : "red";
     },
-    dragTask(){
-        console.log("DRAG")
-    }
+    closeForm(value) {
+      this.updateDialog = value;
+    },
   },
 };
 </script>

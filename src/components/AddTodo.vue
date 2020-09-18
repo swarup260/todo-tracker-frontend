@@ -70,7 +70,6 @@ export default {
       // }),
     };
   },
-  props: ["value"],
   watch: {},
   methods: {
     ...mapActions({
@@ -86,14 +85,14 @@ export default {
             status: false,
             deadline: new Date().toISOString().substr(0, 10),
           };
-          this.$emit("input", false);
+          this.$emit("closeModel", false);
         }
       }
     },
   },
   beforeDestroy() {
     // Always destroy your editor instance when it's no longer needed
-    this.editor.destroy();
+    // this.editor.destroy();
   },
 };
 </script>
