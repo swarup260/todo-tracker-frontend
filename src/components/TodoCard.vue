@@ -15,7 +15,7 @@
     <!-- END UPDATE TODO MODAL -->
     <v-hover v-slot:default="{ hover }">
       <v-card
-        class="mx-auto"
+        class="mx-auto draggable"
         max-width="344"
         :color="getColor(todo.status)"
         dark
@@ -108,5 +108,12 @@ export default {
 }
 .show-btns {
   color: rgba(255, 255, 255, 1) !important;
+}
+
+.draggable {
+    /* Indicate the element draggable */
+    cursor: move;
+    /* Doesn't allow to select the content inside */
+    user-select: none;
 }
 </style>

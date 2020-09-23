@@ -9,7 +9,7 @@
           <template v-slot:activator="{ on, attrs }">
             <span v-bind="attrs" v-on="on" class="material-icons ml-3 pointer" @click="logout">login</span>
           </template>
-          <span>Login</span>
+          <span>Logout</span>
         </v-tooltip>
       </span>
     </v-app-bar>

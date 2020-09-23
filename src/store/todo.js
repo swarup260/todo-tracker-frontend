@@ -23,9 +23,15 @@ export default {
   },
   getters: {
     completeTask(state) {
+      if (state.todos.length == 0 ) {
+        state.todos = getData("Todos");
+      }
       return state.todos.filter((item) => item.status);
     },
     inCompleteTask(state) {
+      if (state.todos.length == 0 ) {
+        state.todos = getData("Todos");
+      }
       return state.todos.filter((item) => !item.status);
     },
   },

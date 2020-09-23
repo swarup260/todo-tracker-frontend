@@ -31,6 +31,16 @@ const routes = [{
     component: () => import('../views/Dashboard.vue')
   },
   {
+    path: '/checklist',
+    name: 'Checklist',
+    component: () => import('../views/CheckList.vue')
+  },
+  {
+    path: '/dragtodo',
+    name: 'DragTodo',
+    component: () => import('../views/TodoDrag.vue')
+  },
+  {
     // will match everything
     path: '*',
     component: () => import('../views/404.vue')
