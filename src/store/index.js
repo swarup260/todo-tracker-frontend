@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import auth from "./auth";
 import todo from "./todo";
+import projects from "./projects"
 Vue.use(Vuex);
 
 const defaultState = {
@@ -23,10 +24,12 @@ export default new Vuex.Store({
       commit("RESET_STATE");
       dispatch("auth/resetAuthState",null , {root : true});
       dispatch("todo/resetTodoState",null,{root : true});
+      dispatch("projects/resetProjects",null,{root : true});
     },
   },
   modules: {
     auth,
     todo,
+    projects
   },
 });

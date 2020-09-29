@@ -8,7 +8,7 @@
       style="display: none"
     >
       <h2 class="ma-5">This project doesn’t have any columns or cards.</h2>
-      <v-btn color="success right" @click="addColumns">Add Columns</v-btn>
+      <v-btn color="success right" @click="addNewProject">Add Columns</v-btn>
     </v-col>
     <draggable
       :list="columns"
@@ -20,9 +20,24 @@
         <v-card outlined>
           <v-card-title>
             {{ column.name }}
-            <!-- <v-text-field outlined v-model="column.name"> </v-text-field>
-            <v-btn>TEXT</v-btn> -->
+            <v-btn
+              class="ma-2 position-button"
+              tile
+              large
+              color="teal"
+              icon
+              @click="isHidden = !isHidden"
+            >
+              <span class="material-icons"> add </span>
+            </v-btn>
           </v-card-title>
+          <v-card-subtitle class="mt-1">
+            <AddNote
+              :class="{ hidden: isHidden }"
+              :id="column._id"
+              @cancel="addNewRow"
+            />
+          </v-card-subtitle>
           <v-card-text>
             <draggable :list="column.rows" group="b">
               <v-row no-gutters v-for="row in column.rows" :key="row.id">
@@ -36,96 +51,72 @@
           </v-card-text>
         </v-card>
       </v-col>
-      <div class="col col-3" slot="footer" role="group">
+      <!-- <div class="col col-3" slot="footer" role="group">
         <v-card outlined>
           <v-card-title> Add Columns </v-card-title>
         </v-card>
-      </div>
+      </div> -->
     </draggable>
   </v-container>
-  <!-- <v-container>
-    <v-row class="mb-6" justify="center" align="center" no-gutters>
-      <v-col cols="12" sm="4">
-        
-        <v-btn small color="primary right">Add Columns</v-btn>
-      </v-col>
-    </v-row>
-    <div></div>
-    <v-row class="mb-6" no-gutters></v-row>
-  </v-container> -->
 </template>
 
 <script>
 import draggable from "vuedraggable";
+import { mapGetters, mapMutations, mapActions } from "vuex";
+import AddNote from "@/components/Ticketing/AddNote";
 export default {
   components: {
     draggable,
+    AddNote,
   },
   data() {
     return {
-      columns: [
-        {
-          _id: 1,
-          name: "COL",
-          rows: [
-            {
-              id: 1,
-              name: "S-COL",
-            },
-            {
-              id: 2,
-              name: "M-COL",
-            },
-            {
-              id: 3,
-              name: "D-COL",
-            },
-          ],
-        },
-        {
-          _id: 2,
-          name: "COL2",
-          rows: [
-            {
-              id: 1,
-              name: "S",
-            },
-            {
-              id: 2,
-              name: "M",
-            },
-            {
-              id: 3,
-              name: "d",
-            },
-          ],
-        },
-        {
-          _id: 1,
-          name: "COL3",
-          rows: [
-            {
-              id: 1,
-              name: "S",
-            },
-            {
-              id: 2,
-              name: "M",
-            },
-            {
-              id: 3,
-              name: "d",
-            },
-          ],
-        },
-      ],
+      isHidden: true,
+      newRowName: "",
     };
   },
-  methods: {
-    addColumns() {
-      this.$refs.startProject.style.display = "none";
-      this.$refs.starterProject.style.display = "flex";
+  computed: {
+    columns: {
+      get() {
+        return this.getColumns();
+      },
+      set(value) {
+        this.SET_COLUMNS(value);
+      },
     },
+  },
+  methods: {
+    ...mapGetters({
+      getColumns: "projects/getColumns",
+    }),
+    ...mapActions({
+      fetchColumn: "projects/fetchColumn",
+    }),
+    ...mapMutations(["SET_COLUMNS"]),
+    addNewProject() {
+      this.$refs.startProject.style.display = "none";
+      this.$refs.starterProject.$el.style.display = "flex";
+    },
+    addTicket() {},
+    addNewRow(data) {
+      if (!data.name) {
+        return false;
+      }
+      this.columns.forEach((element) => {
+        if (element._id == data.id) {
+          element.rows.push({
+            id: Math.floor(Math.random(1, 100)),
+            name: data.name,
+          });
+        }
+      });
+    },
+    closeForm(data) {
+      return true;
+    },
+  },
+  created() {
+    this.fetchColumn();
   },
 };
 </script>
@@ -135,5 +126,12 @@ export default {
   overflow-x: auto;
   white-space: nowrap;
   flex-wrap: nowrap;
+}
+.position-button {
+  position: absolute;
+  right: 0;
+}
+.hidden {
+  display: none;
 }
 </style> 
