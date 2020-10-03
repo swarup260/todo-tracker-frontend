@@ -8,6 +8,9 @@ const endpoints = {
     },
     todos : {
         todos : '/todos'
+    },
+    projects : {
+        projects : '/projects',        
     }
 }
 

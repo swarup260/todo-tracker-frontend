@@ -1,96 +1,98 @@
-// import axios from "axios";
-// import {
-//     endpoints
-// } from "../api/urls";
+import axios from "axios";
+import { endpoints } from "../api/urls";
 
-import {
-    getData,
-    storeData
-} from "../utils/localStorage";
+import { getData, storeData } from "../utils/localStorage";
 
 const defaultState = {
-    columns: [{
-            _id: 1,
-            name: "COL",
-            rows: [{
-                    id: 1,
-                    name: "S-COL",
-                },
-                {
-                    id: 2,
-                    name: "M-COL",
-                },
-                {
-                    id: 3,
-                    name: "D-COL",
-                },
-            ],
-        },
-        {
-            _id: 2,
-            name: "COL2",
-            rows: [{
-                    id: 1,
-                    name: "S",
-                },
-                {
-                    id: 2,
-                    name: "M",
-                },
-                {
-                    id: 3,
-                    name: "d",
-                },
-            ],
-        },
-        {
-            _id: 3,
-            name: "COL3",
-            rows: [{
-                    id: 1,
-                    name: "S",
-                },
-                {
-                    id: 2,
-                    name: "M",
-                },
-                {
-                    id: 3,
-                    name: "d",
-                },
-            ],
-        },
-    ]
+  projects: [],
 };
 
 export default {
-    namespaced: true,
-    state: defaultState,
-    mutations: {
-        SET_COLUMNS(state, columns) {
-            state.columns = columns;
-            storeData("columns", state.columns);
-        },
-        RESET_STATE(state) {
-            state.columns = [];
-        },
+  namespaced: true,
+  state: defaultState,
+  mutations: {
+    SET_PROJECTS(state, projects) {
+      state.projects = projects;
+      storeData("projects", state.projects);
     },
-    getters: {
-        getColumns(state) {
-            if (getData("columns")) {
-                state.columns = getData("columns");
-            }
-            return state.columns;
-        },
+    ADD_PROJECTS(state, project) {
+      state.projects.push(project);
+      const projects = getData("projects");
+      projects.push(project);
+      storeData("projects", projects);
     },
-    actions: {
-        fetchColumn() {
-            console.log("Fetching.......")
-        },
-        resetProjects({
-            commit
-        }) {
-            commit("RESET_STATE")
+    RESET_STATE(state) {
+      state.columns = [];
+    },
+  },
+  getters: {
+    getProjects(state) {
+      if (getData("projects")) {
+        state.projects = getData("projects");
+      }
+      return state.projects;
+    },
+  },
+  actions: {
+    async fetchProjects({ commit }) {
+      try {
+        const { data, status } = await axios.get(endpoints.projects.projects);
+        if (status == 200) {
+          commit("SET_PROJECTS", data.data);
         }
+      } catch (error) {
+        let message;
+        if (error.response) {
+          message = error.response.data.message;
+        } else {
+          message = error.toString();
+        }
+        commit(
+          "SET_MESSAGE",
+          { message: message, type: "error" },
+          { root: true }
+        );
+      }
     },
+    async addProject({ commit }, newData) {
+      try {
+        const { status, data } = await axios.post(
+          endpoints.projects.projects,
+          newData
+        );
+
+        if (status == 200) {
+          commit("ADD_PROJECTS", data.data);
+
+          /* set the messages */
+          commit(
+            "SET_MESSAGE",
+            {
+              message: data.message,
+              type: "success",
+            },
+            {
+              root: true,
+            }
+          );
+          return true;
+        }
+      } catch (error) {
+        let message;
+        if (error.response) {
+          message = error.response.data.message;
+        } else {
+          message = error.toString();
+        }
+        commit(
+          "SET_MESSAGE",
+          { message: message, type: "error" },
+          { root: true }
+        );
+      }
+    },
+    resetProjects({ commit }) {
+      commit("RESET_STATE");
+    },
+  },
 };

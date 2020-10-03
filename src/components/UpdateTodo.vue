@@ -1,14 +1,20 @@
 <template>
   <v-container>
     <v-form ref="updateToDoForm" @submit.prevent="updateTodoInfo">
-      <v-text-field v-model="inputUser.taskName" :rules="inputRules" label="Task Name" outlined></v-text-field>
-      <v-textarea v-model="inputUser.description" label="Description" outlined></v-textarea>
+      <v-text-field :value="formData.taskName" :rules="inputRules" label="Task Name" outlined></v-text-field>
+      <v-textarea :value="formData.description" label="Description" outlined></v-textarea>
       <v-row class="mb-6" justify="center" no-gutters>
         <v-col lg="6">
-          <v-switch v-model="switchStatus" class="ma-2" label="Status"></v-switch>
+          <v-switch :value="formData.status" class="ma-2" label="Status"></v-switch>
         </v-col>
         <v-col lg="6">
-          <v-dialog ref="updatedialog" v-model="datePickerModal" :return-value.sync="deadline" persistent width="290px">
+          <v-dialog
+            ref="updatedialog"
+            v-model="datePickerModal"
+            :return-value.sync="deadline"
+            persistent
+            width="290px"
+          >
             <template v-slot:activator="{ on, attrs }">
               <v-text-field
                 v-model="deadline"
@@ -39,25 +45,32 @@ import { rules } from "../utils/validation-rule";
 import { mapActions } from "vuex";
 export default {
   props: {
-    inputUser: Object
+    inputUser: Object,
   },
   data() {
     return {
       datePickerModal: false,
       inputRules: rules.inputRules,
-      switchStatus: this.$props.inputUser.status
+      formData: {
+        status: this.$props.inputUser.status,
+        taskName: this.$props.inputUser.taskName,
+        deadline: this.$props.inputUser.deadline,
+        description: this.$props.inputUser.description,
+      },
     };
   },
   computed: {
-    deadline : {
-      get(){
+    deadline: {
+      get() {
         console.log(this.$props.inputUser.deadline);
-        return new Date(this.$props.inputUser.deadline).toISOString().substr(0, 10);
+        return new Date(this.$props.inputUser.deadline)
+          .toISOString()
+          .substr(0, 10);
       },
-      set(newValue){
+      set(newValue) {
         this.$props.inputUser.deadline = newValue;
         console.log(this.$props.inputUser.deadline);
-      }
+      },
     },
   },
   methods: {
@@ -69,12 +82,7 @@ export default {
         const userInput = this.$props.inputUser;
         this.updateTodo({
           id: userInput._id,
-          update: {
-            status: this.switchStatus,
-            taskName: userInput.taskName,
-            deadline: userInput.deadline,
-            description: userInput.description,
-          },
+          update: this.formData,
         });
         this.$emit("closeUpdateFormModel", false);
       }
