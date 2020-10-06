@@ -5,6 +5,7 @@ import { getData, storeData } from "../utils/localStorage";
 
 const defaultState = {
   projects: [],
+  modalState : false
 };
 
 export default {
@@ -21,6 +22,9 @@ export default {
       projects.push(project);
       storeData("projects", projects);
     },
+    SET_MODAL_STATE(state,status){
+      state.modalState = status;
+    },
     RESET_STATE(state) {
       state.columns = [];
     },
@@ -32,6 +36,9 @@ export default {
       }
       return state.projects;
     },
+    getModalState(state){
+      return state.modalState;
+    }
   },
   actions: {
     async fetchProjects({ commit }) {
@@ -90,6 +97,10 @@ export default {
           { root: true }
         );
       }
+    },
+    setModalState({commit} , status){
+      console.log(status);
+      commit("SET_MODAL_STATE",status);
     },
     resetProjects({ commit }) {
       commit("RESET_STATE");

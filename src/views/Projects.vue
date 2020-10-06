@@ -1,12 +1,16 @@
 <template>
   <v-container>
     <v-row justify="center" no-gutters>
-      <v-col cols="6">
+      <v-col sm="12" md="6">
         <AddProject />
       </v-col>
     </v-row>
+    <span v-if="getProjects.length > 0" class="mt-10">
+      <h3 class="pa-3">Projects</h3>
+      <v-divider></v-divider>
+    </span>
     <v-row>
-      <v-col cols="3" v-for="project in getProjects" :key="project._id">
+      <v-col class="flex-basis-fix" sm="3" v-for="project in getProjects" :key="project._id">
         <ProjectCard :project="project" />
       </v-col>
     </v-row>
@@ -41,5 +45,8 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+ .flex-basis-fix {
+   flex-basis: auto
+ }
 </style>
