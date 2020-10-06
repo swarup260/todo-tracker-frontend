@@ -22,3 +22,36 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+
+## RoadMap 
+
+### Version 1.1
+- [x] Users Api Integration 
+- [x] Todo Curd Api Integration
+### Version 1.2
+- [x] Bug Fixes 
+### Version 1.3
+- [ ] Project Management Api Integration
+- [ ] Project Management View
+### Version 1.4
+- [ ] Project Notes Api Integration
+- [ ] Project Management Bug Fixes
+### Version 1.5
+- [ ] No Internet  
+- [ ] Loader Screen while fetch the records
+- [ ] Remove current modal functionality from todo and move to vuex
+### Version 1.6
+- [ ] Editor.js integration in Todo description 
+- [ ] Editor.js integration in Project Notes
+### Version 1.7
+- [ ] Habit Tracker Api Integration
+- [ ] Habit Tracker View 
+- [ ] Habit Tracker Charts 
+### Version 1.8
+- [ ] ChartJs Integration 
+- [ ] Todo Deadline integration 
+
+
+
