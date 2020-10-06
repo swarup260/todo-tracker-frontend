@@ -1,36 +1,58 @@
 <template>
   <v-containter>
-    <v-col class="fill-width"><h2 class="pa-5">{{ project.projectName }} </h2></v-col>
+    <v-col class="fill-width">
+      <v-card outlined>
+        <v-card-title class="title text-capitalize">
+          {{ project.projectName }}
+        </v-card-title>
+      </v-card>
+    </v-col>
     <v-col
       align="center"
       justify="center"
       class="fill-width"
       ref="startProject"
+      v-if="project.columns.length == 0"
     >
       <h2 class="ma-5">This project doesn’t have any columns or cards.</h2>
       <v-btn color="success right" @click="addNewProject">Add Columns</v-btn>
     </v-col>
+    <ProjectCol :project="project" />
   </v-containter>
 </template>
 
 <script>
-import { getData } from "../utils/localStorage";
+import { mapGetters, mapActions } from "vuex";
+import ProjectCol from "@/components/Projects/ProjectCol";
 export default {
+  components: {
+    ProjectCol,
+  },
   data() {
-    return {
-      project: {},
-    };
+    return {};
   },
   methods: {
-    getProject() {
-      this.project = getData("projects").filter(
-        (project) => this.$route.params.id == project._id
-      )[0] || {};
+    ...mapGetters({
+      getProject: "projects/getProject",
+    }),
+    ...mapActions({
+      fetchProject: "projects/fetchProject",
+    }),
+    addNewProject() {},
+  },
+  computed: {
+    project: {
+      get() {
+        return this.getProject();
+      },
+      set() {
+        return this.getProject();
+      },
     },
   },
-  created(){
-    this.getProject();
-  }
+  async created() {
+    this.fetchProject(this.$route.params.id);
+  },
 };
 </script>
 

@@ -1,11 +1,17 @@
 import axios from "axios";
-import { endpoints } from "../api/urls";
+import {
+  endpoints
+} from "../api/urls";
 
-import { getData, storeData } from "../utils/localStorage";
+import {
+  getData,
+  storeData
+} from "../utils/localStorage";
 
 const defaultState = {
   projects: [],
-  modalState : false
+  modalState: false,
+  project: {}
 };
 
 export default {
@@ -22,12 +28,19 @@ export default {
       projects.push(project);
       storeData("projects", projects);
     },
-    SET_MODAL_STATE(state,status){
+    SET_MODAL_STATE(state, status) {
       state.modalState = status;
     },
-    RESET_STATE(state) {
-      state.columns = [];
+    SET_PROJECT(state, project) {
+      state.project = project;
+      storeData("project", state.project);
     },
+    RESET_STATE(state) {
+      state.projects = [];
+      state.project = {};
+      state.modalState = false;
+
+    }
   },
   getters: {
     getProjects(state) {
@@ -36,14 +49,25 @@ export default {
       }
       return state.projects;
     },
-    getModalState(state){
+    getModalState(state) {
       return state.modalState;
-    }
+    },
+    getProject(state) {
+      if (getData("project")) {
+        state.project = getData("project");
+      }
+      return state.project;
+    },
   },
   actions: {
-    async fetchProjects({ commit }) {
+    async fetchProjects({
+      commit
+    }) {
       try {
-        const { data, status } = await axios.get(endpoints.projects.projects);
+        const {
+          data,
+          status
+        } = await axios.get(endpoints.projects.projects);
         if (status == 200) {
           commit("SET_PROJECTS", data.data);
         }
@@ -55,15 +79,23 @@ export default {
           message = error.toString();
         }
         commit(
-          "SET_MESSAGE",
-          { message: message, type: "error" },
-          { root: true }
+          "SET_MESSAGE", {
+            message: message,
+            type: "error"
+          }, {
+            root: true
+          }
         );
       }
     },
-    async addProject({ commit }, newData) {
+    async addProject({
+      commit
+    }, newData) {
       try {
-        const { status, data } = await axios.post(
+        const {
+          status,
+          data
+        } = await axios.post(
           endpoints.projects.projects,
           newData
         );
@@ -73,12 +105,10 @@ export default {
 
           /* set the messages */
           commit(
-            "SET_MESSAGE",
-            {
+            "SET_MESSAGE", {
               message: data.message,
               type: "success",
-            },
-            {
+            }, {
               root: true,
             }
           );
@@ -92,17 +122,52 @@ export default {
           message = error.toString();
         }
         commit(
-          "SET_MESSAGE",
-          { message: message, type: "error" },
-          { root: true }
+          "SET_MESSAGE", {
+            message: message,
+            type: "error"
+          }, {
+            root: true
+          }
         );
       }
     },
-    setModalState({commit} , status){
-      console.log(status);
-      commit("SET_MODAL_STATE",status);
+    async fetchProject({
+      commit
+    }, id) {
+      try {
+        const {
+          data,
+          status
+        } = await axios.get(`${endpoints.projects.projects}/${id}`);
+        if (status == 200) {
+          commit("SET_PROJECT", data.data[0]);
+        }
+      } catch (error) {
+        let message;
+        if (error.response) {
+          message = error.response.data.message;
+        } else {
+          message = error.toString();
+        }
+        commit(
+          "SET_MESSAGE", {
+            message: message,
+            type: "error"
+          }, {
+            root: true
+          }
+        );
+      }
     },
-    resetProjects({ commit }) {
+    setModalState({
+      commit
+    }, status) {
+      console.log(status);
+      commit("SET_MODAL_STATE", status);
+    },
+    resetProjects({
+      commit
+    }) {
       commit("RESET_STATE");
     },
   },
