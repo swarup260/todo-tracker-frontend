@@ -131,16 +131,66 @@ export default {
         );
       }
     },
-    async fetchProject({
+    async fetchProjectCols({
       commit
     }, id) {
       try {
         const {
           data,
           status
-        } = await axios.get(`${endpoints.projects.projects}/${id}`);
+        } = await axios.get(`${endpoints.projects.column}/${id}`);
         if (status == 200) {
-          commit("SET_PROJECT", data.data[0]);
+          console.log(data);
+          commit("SET_PROJECT", data.data);
+        }
+      } catch (error) {
+        let message;
+        if (error.response) {
+          message = error.response.data.message;
+        } else {
+          message = error.toString();
+        }
+        commit(
+          "SET_MESSAGE", {
+            message: message,
+            type: "error"
+          }, {
+            root: true
+          }
+        );
+      }
+    },
+    async updateProject({commit} ,udpateData){
+      try {
+        const {
+          status,
+          data
+        } = await axios.patch(
+          endpoints.projects.projects,
+          udpateData
+        );
+
+        if (status == 200) {
+          const id = data._id;
+          const projects = getData('projects');
+          for (let index = 0; index < projects.length; index++) {
+            if (projects[index]._id == id) {
+              projects[index] = data.data;
+            }
+          }
+          storeData("projects", projects);
+          commit("SET_PROJECTS", projects);
+
+          /* set the messages */
+          commit(
+            "SET_MESSAGE", {
+              message: data.message,
+              type: "success",
+            }, {
+              root: true,
+            }
+          );
+          return true;
         }
       } catch (error) {
         let message;

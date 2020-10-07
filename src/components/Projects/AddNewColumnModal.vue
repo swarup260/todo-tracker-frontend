@@ -8,22 +8,16 @@
         :retain-focus="false"
       >
         <v-card>
-          <v-card-title class="headline"> Update Project Details </v-card-title>
+          <v-card-title class="headline"> Add New Column </v-card-title>
           <v-card-text>
-            <v-form ref="updateProjectForm" @submit.prevent="updateProject">
+            <v-form ref="AddColumnForm" @submit.prevent="addColumn">
               <v-text-field
                 v-model="inputUser.name"
                 :rules="inputRules"
-                label="Project Name"
+                label="Column Name"
                 outlined
               ></v-text-field>
-              <v-textarea
-                v-model="inputUser.description"
-                label="Description"
-                outlined
-                height="5"
-              ></v-textarea>
-              <v-btn color="success" block type="submit">Update</v-btn>
+              <v-btn color="success" block type="submit">Add</v-btn>
             </v-form>
           </v-card-text>
           <v-card-actions>
@@ -49,8 +43,7 @@ export default {
     return {
       inputRules: rules.inputRules,
       inputUser: {
-        name: this.$props.project.name,
-        description: this.$props.project.description,
+        name: "",
       },
     };
   },
@@ -62,20 +55,18 @@ export default {
   methods: {
     ...mapActions({
       setModalState: "projects/setModalState",
-      update: "projects/updateProject",
+      add: "projects/addColumn",
     }),
     setModal(status) {
       // console.log(status);
       this.setModalState(status);
     },
-    async updateProject() {
-      let result = await this.update({
-        projectId: this.$props.project._id,
-        update: { ...this.inputUser },
-      });
-      if (result) {
+    async AddColumn() {
         this.setModalState(false);
-      }
+    //   let result = await this.add({ ...this.inputUser });
+    //   if (result) {
+    //     this.setModalState(false);
+    //   }
     },
   },
 };

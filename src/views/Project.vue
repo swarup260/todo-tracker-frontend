@@ -36,7 +36,7 @@ export default {
       getProject: "projects/getProject",
     }),
     ...mapActions({
-      fetchProject: "projects/fetchProject",
+      fetchProjectCols: "projects/fetchProjectCols",
     }),
     addNewProject() {},
   },
@@ -51,7 +51,7 @@ export default {
     },
   },
   async created() {
-    this.fetchProject(this.$route.params.id);
+    this.fetchProjectCols(this.$route.params.id);
   },
 };
 </script>

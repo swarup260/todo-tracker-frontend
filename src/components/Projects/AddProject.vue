@@ -6,7 +6,7 @@
     <v-card-text>
       <v-form ref="addNewProject" @submit.prevent="submitHandler" class="pa-2">
         <v-text-field
-          v-model="inputUser.projectName"
+          v-model="inputUser.name"
           :rules="inputRules"
           label="Project Name"
           outlined
@@ -31,7 +31,7 @@ export default {
     return {
       inputRules: rules.inputRules,
       inputUser: {
-        projectName: "",
+        name: "",
         description: "",
       },
     };
@@ -45,7 +45,7 @@ export default {
         const result = await this.addProject({ ...this.inputUser });
         if (result) {
           this.inputUser = {
-            projectName: "",
+            name: "",
             description: "",
           };
         }

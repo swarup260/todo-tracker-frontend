@@ -1,18 +1,19 @@
 <template>
   <v-container>
-    <UpdateProjectModal :project="project" />
+    <UpdateProjectModal :project.sync="projectData" />
     <v-hover v-slot:default="{ hover }">
       <v-card
         outlined
         color="red lighten-1"
         :elevation="hover ? 20 : 2"
         :class="{ 'on-hover': hover }"
+        max-width="344"
       >
         <v-card-title
           class="headline text-truncate d-inline-block"
-          style="max-width: 200px"
+          style="max-width: 300px"
         >
-          {{ project.projectName }}
+          {{ project.name }}
           <span
             :class="{ 'show-action': hover }"
             class="material-icons position-forward-action pa-2"

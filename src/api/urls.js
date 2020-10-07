@@ -10,7 +10,9 @@ const endpoints = {
         todos : '/todos'
     },
     projects : {
-        projects : '/projects',        
+        projects : '/projects',
+        column : '/projects/column',
+        notes  : '/projects/note'
     }
 }
 
