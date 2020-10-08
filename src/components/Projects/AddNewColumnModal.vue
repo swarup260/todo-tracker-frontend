@@ -10,7 +10,6 @@
         <v-card>
           <v-card-title class="headline"> Add New Column </v-card-title>
           <v-card-text>
-            {{  projectId }}
             <v-form ref="AddColumnForm" @submit.prevent="addColumn">
               <v-text-field
                 v-model="inputUser.name"
@@ -51,6 +50,7 @@ export default {
   computed: {
     ...mapGetters({
       modalState: "projects/getModalState",
+      project: "projects/getProject",
     }),
   },
   methods: {
@@ -62,8 +62,14 @@ export default {
       // console.log(status);
       this.setModalState(status);
     },
-    async AddColumn() {
-      let result = await this.add({  });
+    async addColumn() {
+      let result = await this.add({
+        projectId: this.$props.projectId,
+        update: {
+          ...this.inputUser,
+          position: this.project.columns.length + 1,
+        },
+      });
       if (result) {
         this.setModalState(false);
       }

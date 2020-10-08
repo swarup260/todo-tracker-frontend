@@ -1,19 +1,21 @@
 <template>
-  <v-container>
-    <v-form ref="signUpForm" @submit.prevent="submitHandler(id)">
+  <v-card outlined class="pa-2">
+    <v-form ref="signUpForm" @submit.prevent="submitHandler">
       <v-text-field outlined v-model="noteName"></v-text-field>
-      <v-btn-toggle>
+      <v-row no-gutters justify="space-between">
         <v-btn type="submit" large color="success">Add</v-btn>
-        <v-btn large @click="cancel">Cancel</v-btn>
-      </v-btn-toggle>
+        <v-btn large @click="setNoteModalState(false)">Cancel</v-btn>
+      </v-row>
     </v-form>
-  </v-container>
+  </v-card>
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   props: {
-    id: Number,
+    columnId: String,
+    projectId: String,
   },
   data() {
     return {
@@ -21,15 +23,29 @@ export default {
     };
   },
   methods: {
-    submitHandler(id) {
-      this.$emit("ticketName", { id: id, name: this.noteName });
-    },
-    cancel() {
-      this.$emit("hidden", "true");
+    ...mapActions({
+      setNoteModalState: "projects/setNoteModalState",
+      add: "projects/addNote",
+    }),
+    async submitHandler() {
+      const result = await this.add({
+        projectId: this.$props.projectId,
+        update: {
+          name: this.noteName,
+          position: 1,
+          columnRef: this.$props.columnId,
+        },
+      });
+      if (result) {
+        this.noteName = "";
+      }
     },
   },
 };
 </script>
 
-<style>
+<style scoped>
+.hidden {
+  display: none;
+}
 </style>

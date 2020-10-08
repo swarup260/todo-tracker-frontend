@@ -101,7 +101,7 @@ export default {
   top: 0;
   font-size: 20px;
   opacity: 0;
-  cursor: pointer;
+  cursor: cell;
 }
 .show-delete-action {
   opacity: 1;

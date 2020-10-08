@@ -23,7 +23,21 @@
         <v-card outlined>
           <v-card-title>
             {{ column.name }}
+            <span
+              class="material-icons position-add-action pa-3"
+              @click="showAddNote($event)"
+              v-if="!noteNodalState"
+            >
+              add
+            </span>
           </v-card-title>
+          <v-card-subtitle class="mt-1">
+            <AddNote
+              v-if="noteNodalState"
+              :columnId="column._id"
+              :projectId="project._id"
+            />
+          </v-card-subtitle>
           <v-card-text>
             <draggable :list="column.notes" group="b">
               <v-row no-gutters v-for="row in column.notes" :key="row._id">
@@ -37,7 +51,7 @@
           </v-card-text>
         </v-card>
       </v-col>
-              <AddNewColumn />
+      <AddNewColumn />
     </draggable>
   </v-container>
 </template>
@@ -45,10 +59,13 @@
 <script>
 import draggable from "vuedraggable";
 import AddNewColumn from "./AddNewColumn";
+import AddNote from "../Ticketing/AddNote";
+import { mapActions, mapGetters } from "vuex";
 export default {
   components: {
     draggable,
     AddNewColumn,
+    AddNote,
   },
   props: {
     project: Object,
@@ -56,7 +73,22 @@ export default {
   data() {
     return {
       dragging: false,
+      isHidden: this.noteNodalState,
     };
+  },
+  methods: {
+    ...mapActions({
+      setNoteModalState: "projects/setNoteModalState",
+    }),
+    showAddNote(event) {
+      console.log(event);
+      this.setNoteModalState(true);
+    },
+  },
+  computed: {
+    ...mapGetters({
+      noteNodalState: "projects/getNoteModalState",
+    }),
   },
 };
 </script>
@@ -75,6 +107,14 @@ export default {
   display: none;
 }
 .item {
+  cursor: move;
+}
+
+.position-add-action {
+  position: absolute;
+  right: 0;
+  top: 0;
+  font-size: 20px;
   cursor: pointer;
 }
 </style>

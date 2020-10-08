@@ -1,6 +1,6 @@
 <template>
   <v-col class="opacity-item" sm="4" md="4" lg="2">
-    <AddNewColumnModal style="position: absolute" />
+    <AddNewColumnModal :projectId="project._id" style="position: absolute" />
     <v-hover v-slot:default="{ hover }">
       <v-card
         outlined
@@ -21,12 +21,15 @@
 
 <script>
 import AddNewColumnModal from "./AddNewColumnModal";
-import { mapActions } from "vuex";
+import { mapActions,mapGetters } from "vuex";
 export default {
   components: {
     AddNewColumnModal,
   },
   methods: {
+    ...mapGetters({
+      getProject: "projects/getProject",
+    }),
     ...mapActions({
       setModalState: "projects/setModalState",
     }),
@@ -34,6 +37,13 @@ export default {
       this.setModalState(true);
     },
   },
+  computed : {
+    project : {
+      get(){
+        return this.getProject();
+      }
+    }
+  }
 };
 </script>
 
