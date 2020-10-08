@@ -1,5 +1,6 @@
 <template>
   <v-containter>
+    <AddNewColumnModal :projectId="$route.params.id" style="position: absolute" />
     <v-col class="fill-width">
       <v-card outlined>
         <v-card-title class="title text-capitalize">
@@ -15,18 +16,20 @@
       v-if="project.columns.length == 0"
     >
       <h2 class="ma-5">This project doesn’t have any columns or cards.</h2>
-      <v-btn color="success right" @click="addNewProject">Add Columns</v-btn>
+      <v-btn color="success right" @click="setModalState(true)">Add Columns</v-btn>
     </v-col>
-    <ProjectCol :project="project" />
+    <ProjectCol v-if="project.columns.length > 0" :project="project" />
   </v-containter>
 </template>
 
 <script>
 import { mapGetters, mapActions } from "vuex";
 import ProjectCol from "@/components/Projects/ProjectCol";
+import AddNewColumnModal from "@/components/Projects/AddNewColumnModal";
 export default {
   components: {
     ProjectCol,
+    AddNewColumnModal
   },
   data() {
     return {};
@@ -37,6 +40,7 @@ export default {
     }),
     ...mapActions({
       fetchProjectCols: "projects/fetchProjectCols",
+      setModalState: "projects/setModalState",
     }),
     addNewProject() {},
   },

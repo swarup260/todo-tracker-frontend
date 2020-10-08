@@ -10,6 +10,7 @@
         <v-card>
           <v-card-title class="headline"> Add New Column </v-card-title>
           <v-card-text>
+            {{  projectId }}
             <v-form ref="AddColumnForm" @submit.prevent="addColumn">
               <v-text-field
                 v-model="inputUser.name"
@@ -37,7 +38,7 @@ import { mapGetters, mapActions } from "vuex";
 import { rules } from "../../utils/validation-rule";
 export default {
   props: {
-    project: Object,
+    projectId: String,
   },
   data() {
     return {
@@ -62,11 +63,10 @@ export default {
       this.setModalState(status);
     },
     async AddColumn() {
+      let result = await this.add({  });
+      if (result) {
         this.setModalState(false);
-    //   let result = await this.add({ ...this.inputUser });
-    //   if (result) {
-    //     this.setModalState(false);
-    //   }
+      }
     },
   },
 };
