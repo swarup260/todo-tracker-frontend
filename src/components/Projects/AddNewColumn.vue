@@ -1,5 +1,5 @@
 <template>
-  <v-col class="opacity-item" sm="4" md="4" lg="2">
+  <v-col class="opacity-item" sm="4" md="3" lg="2">
     <AddNewColumnModal :projectId="project._id" style="position: absolute" />
     <v-hover v-slot:default="{ hover }">
       <v-card
@@ -10,10 +10,10 @@
         @click="openModal()"
         class="card-design"
       >
-        <v-card-title>
+        <v-card-subtitle class="flex-align">
           <span class="material-icons"> add</span>
           Add New Column
-        </v-card-title>
+        </v-card-subtitle>
       </v-card>
     </v-hover>
   </v-col>
@@ -54,5 +54,8 @@ export default {
 .card-design {
   background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='4' ry='4' stroke='%23333' stroke-width='4' stroke-dasharray='15%2c 13' stroke-dashoffset='65' stroke-linecap='square'/%3e%3c/svg%3e");
   border-radius: 4px;
+}
+.flex-align {
+  display: flex;
 }
 </style>

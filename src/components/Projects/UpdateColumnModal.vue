@@ -8,9 +8,9 @@
         :retain-focus="false"
       >
         <v-card>
-          <v-card-title class="headline"> Add New Column </v-card-title>
+          <v-card-title class="headline"> Update Column </v-card-title>
           <v-card-text>
-            <v-form ref="AddColumnForm" @submit.prevent="addColumn">
+            <v-form ref="AddColumnForm" @submit.prevent="UpdateColumn">
               <v-text-field
                 v-model="inputUser.name"
                 :rules="inputRules"
@@ -38,12 +38,13 @@ import { rules } from "../../utils/validation-rule";
 export default {
   props: {
     projectId: String,
+    column : Object
   },
   data() {
     return {
       inputRules: rules.inputRules,
       inputUser: {
-        name: "",
+        name: this.$props.column.name,
       },
     };
   },
@@ -56,7 +57,7 @@ export default {
   methods: {
     ...mapActions({
       setModalState: "projects/setModalState",
-      add: "projects/addColumn",
+      update: "projects/updateColumn",
     }),
     setModal(status) {
       // console.log(status);

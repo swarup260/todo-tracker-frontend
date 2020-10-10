@@ -1,12 +1,7 @@
 import axios from "axios";
-import {
-  endpoints
-} from "../api/urls";
+import { endpoints } from "../api/urls";
 
-import {
-  getData,
-  storeData
-} from "../utils/localStorage";
+import { getData, storeData } from "../utils/localStorage";
 
 const defaultState = {
   projects: [],
@@ -52,8 +47,17 @@ export default {
       }
       return state.projects;
     },
-    getModalState(state) {
-      return state.modalState;
+    getModalState(state, params) {
+      switch (params) {
+        case "note":
+          return state.noteModalState;
+        case "addNewColumn":
+          return state.modalState;
+        case "addUpdateColumn":
+          return state.modalState;
+        default:
+          return state.modalState;
+      }
     },
     getNoteModalState(state) {
       return state.noteModalState;
@@ -67,14 +71,9 @@ export default {
   },
   actions: {
     /* Projects Actions  */
-    async fetchProjects({
-      commit
-    }) {
+    async fetchProjects({ commit }) {
       try {
-        const {
-          data,
-          status
-        } = await axios.get(endpoints.projects.projects);
+        const { data, status } = await axios.get(endpoints.projects.projects);
         if (status == 200) {
           commit("SET_PROJECTS", data.data);
         }
@@ -86,23 +85,20 @@ export default {
           message = error.toString();
         }
         commit(
-          "SET_MESSAGE", {
+          "SET_MESSAGE",
+          {
             message: message,
             type: "error",
-          }, {
+          },
+          {
             root: true,
           }
         );
       }
     },
-    async addProject({
-      commit
-    }, newData) {
+    async addProject({ commit }, newData) {
       try {
-        const {
-          status,
-          data
-        } = await axios.post(
+        const { status, data } = await axios.post(
           endpoints.projects.projects,
           newData
         );
@@ -112,10 +108,12 @@ export default {
 
           /* set the messages */
           commit(
-            "SET_MESSAGE", {
+            "SET_MESSAGE",
+            {
               message: data.message,
               type: "success",
-            }, {
+            },
+            {
               root: true,
             }
           );
@@ -129,23 +127,20 @@ export default {
           message = error.toString();
         }
         commit(
-          "SET_MESSAGE", {
+          "SET_MESSAGE",
+          {
             message: message,
             type: "error",
-          }, {
+          },
+          {
             root: true,
           }
         );
       }
     },
-    async fetchProjectCols({
-      commit
-    }, id) {
+    async fetchProjectCols({ commit }, id) {
       try {
-        const {
-          data,
-          status
-        } = await axios.get(
+        const { data, status } = await axios.get(
           `${endpoints.projects.column}/${id}`
         );
         if (status == 200) {
@@ -160,24 +155,21 @@ export default {
           message = error.toString();
         }
         commit(
-          "SET_MESSAGE", {
+          "SET_MESSAGE",
+          {
             message: message,
             type: "error",
-          }, {
+          },
+          {
             root: true,
           }
         );
       }
     },
     /* Columns Actions */
-    async updateProject({
-      commit
-    }, udpateData) {
+    async updateProject({ commit }, udpateData) {
       try {
-        const {
-          status,
-          data
-        } = await axios.patch(
+        const { status, data } = await axios.patch(
           endpoints.projects.projects,
           udpateData
         );
@@ -195,10 +187,12 @@ export default {
 
           /* set the messages */
           commit(
-            "SET_MESSAGE", {
+            "SET_MESSAGE",
+            {
               message: data.message,
               type: "success",
-            }, {
+            },
+            {
               root: true,
             }
           );
@@ -212,29 +206,25 @@ export default {
           message = error.toString();
         }
         commit(
-          "SET_MESSAGE", {
+          "SET_MESSAGE",
+          {
             message: message,
             type: "error",
-          }, {
+          },
+          {
             root: true,
           }
         );
       }
     },
-    async addColumn({
-      commit
-    }, newData) {
+    async addColumn({ commit }, newData) {
       try {
-        const {
-          status,
-          data
-        } = await axios.post(
+        const { status, data } = await axios.post(
           endpoints.projects.column,
           newData
         );
 
         if (status == 200) {
-
           const project = getData("project");
           project.columns = data.data.columns;
           storeData("project", project);
@@ -242,10 +232,12 @@ export default {
 
           /* set the messages */
           commit(
-            "SET_MESSAGE", {
+            "SET_MESSAGE",
+            {
               message: data.message,
               type: "success",
-            }, {
+            },
+            {
               root: true,
             }
           );
@@ -259,47 +251,90 @@ export default {
           message = error.toString();
         }
         commit(
-          "SET_MESSAGE", {
+          "SET_MESSAGE",
+          {
             message: message,
             type: "error",
-          }, {
+          },
+          {
+            root: true,
+          }
+        );
+      }
+    },
+    async deleteColumn({ commit }, { projectId, columnId }) {
+      try {
+        const { status, data } = await axios.delete(
+          `${endpoints.projects.column}/${projectId}/${columnId}`
+        );
+
+        if (status == 200) {
+          const project = getData("project");
+          project.columns = project.columns.filter(
+            (item) => item._id != columnId
+          );
+          storeData("project", project);
+          commit("SET_PROJECT", project);
+
+          /* set the messages */
+          commit(
+            "SET_MESSAGE",
+            {
+              message: data.message,
+              type: "success",
+            },
+            {
+              root: true,
+            }
+          );
+          return true;
+        }
+      } catch (error) {
+        let message;
+        if (error.response) {
+          message = error.response.data.message;
+        } else {
+          message = error.toString();
+        }
+        commit(
+          "SET_MESSAGE",
+          {
+            message: message,
+            type: "error",
+          },
+          {
             root: true,
           }
         );
       }
     },
     /* Note Actions */
-    async addNote({
-      commit
-    }, newData) {
+    async addNote({ commit }, newData) {
       try {
-        const {
-          status,
-          data
-        } = await axios.post(
+        const { status, data } = await axios.post(
           endpoints.projects.notes,
           newData
         );
 
         if (status == 200) {
-
           const project = getData("project");
           for (let index = 0; index < project.columns.length; index++) {
             const column = project.columns[index];
             if (column._id == newData.update.columnRef) {
               column.notes.push(data.data);
             }
-            
           }
           storeData("project", project);
           commit("SET_PROJECT", project);
 
           /* set the messages */
           commit(
-            "SET_MESSAGE", {
+            "SET_MESSAGE",
+            {
               message: data.message,
               type: "success",
-            }, {
+            },
+            {
               root: true,
             }
           );
@@ -313,31 +348,27 @@ export default {
           message = error.toString();
         }
         commit(
-          "SET_MESSAGE", {
+          "SET_MESSAGE",
+          {
             message: message,
             type: "error",
-          }, {
+          },
+          {
             root: true,
           }
         );
       }
     },
     /* Helper Actions */
-    setModalState({
-      commit
-    }, status) {
+    setModalState({ commit }, status) {
       console.log(status);
       commit("SET_MODAL_STATE", status);
     },
-    setNoteModalState({
-      commit
-    }, status) {
+    setNoteModalState({ commit }, status) {
       console.log(status);
       commit("SET_NOTE_MODAL_STATE", status);
     },
-    resetProjects({
-      commit
-    }) {
+    resetProjects({ commit }) {
       commit("RESET_STATE");
     },
   },

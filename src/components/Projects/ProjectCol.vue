@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <div>
-      {{ project }}
+      <!-- {{ project }} -->
     </div>
     <draggable
       :list="project.columns"
@@ -23,17 +23,18 @@
         <v-card outlined>
           <v-card-title>
             {{ column.name }}
-            <span
+            <DropDownMeun :column="column" :projectId="project._id" />
+            <!-- <span
               class="material-icons position-add-action pa-3"
               @click="showAddNote($event)"
               v-if="!noteNodalState"
             >
               add
-            </span>
+            </span> -->
           </v-card-title>
           <v-card-subtitle class="mt-1">
             <AddNote
-              v-if="noteNodalState"
+              v-if="noteModalState"
               :columnId="column._id"
               :projectId="project._id"
             />
@@ -60,12 +61,14 @@
 import draggable from "vuedraggable";
 import AddNewColumn from "./AddNewColumn";
 import AddNote from "../Ticketing/AddNote";
+import DropDownMeun from "./DropDownMeun";
 import { mapActions, mapGetters } from "vuex";
 export default {
   components: {
     draggable,
     AddNewColumn,
     AddNote,
+    DropDownMeun,
   },
   props: {
     project: Object,
@@ -87,13 +90,13 @@ export default {
   },
   computed: {
     ...mapGetters({
-      noteNodalState: "projects/getNoteModalState",
+      noteModalState: "projects/getNoteModalState",
     }),
   },
 };
 </script>
 
-<style>
+<style scoped>
 .scroll {
   overflow-x: auto;
   white-space: nowrap;
@@ -108,13 +111,5 @@ export default {
 }
 .item {
   cursor: move;
-}
-
-.position-add-action {
-  position: absolute;
-  right: 0;
-  top: 0;
-  font-size: 20px;
-  cursor: pointer;
 }
 </style>

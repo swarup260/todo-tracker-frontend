@@ -3,8 +3,8 @@
     <v-form ref="signUpForm" @submit.prevent="submitHandler">
       <v-text-field outlined v-model="noteName"></v-text-field>
       <v-row no-gutters justify="space-between">
-        <v-btn type="submit" large color="success">Add</v-btn>
-        <v-btn large @click="setNoteModalState(false)">Cancel</v-btn>
+        <v-btn small type="submit"  color="success">Add</v-btn>
+        <v-btn small @click="setNoteModalState(false)">Cancel</v-btn>
       </v-row>
     </v-form>
   </v-card>
