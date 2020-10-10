@@ -20,37 +20,7 @@
         lg="2"
         class="item"
       >
-        <v-card outlined>
-          <v-card-title>
-            {{ column.name }}
-            <DropDownMeun :column="column" :projectId="project._id" />
-            <!-- <span
-              class="material-icons position-add-action pa-3"
-              @click="showAddNote($event)"
-              v-if="!noteNodalState"
-            >
-              add
-            </span> -->
-          </v-card-title>
-          <v-card-subtitle class="mt-1">
-            <AddNote
-              v-if="noteModalState"
-              :columnId="column._id"
-              :projectId="project._id"
-            />
-          </v-card-subtitle>
-          <v-card-text>
-            <draggable :list="column.notes" group="b">
-              <v-row no-gutters v-for="row in column.notes" :key="row._id">
-                <v-col>
-                  <v-card outlined>
-                    <v-card-title>{{ row.name }}</v-card-title>
-                  </v-card>
-                </v-col>
-              </v-row>
-            </draggable>
-          </v-card-text>
-        </v-card>
+        <ProjectColCard :column="column" :projectId="project._id" />
       </v-col>
       <AddNewColumn />
     </draggable>
@@ -60,15 +30,13 @@
 <script>
 import draggable from "vuedraggable";
 import AddNewColumn from "./AddNewColumn";
-import AddNote from "../Ticketing/AddNote";
-import DropDownMeun from "./DropDownMeun";
+import ProjectColCard from "./ProjectColCard";
 import { mapActions, mapGetters } from "vuex";
 export default {
   components: {
     draggable,
     AddNewColumn,
-    AddNote,
-    DropDownMeun,
+    ProjectColCard,
   },
   props: {
     project: Object,
