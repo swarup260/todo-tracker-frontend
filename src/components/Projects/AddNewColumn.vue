@@ -21,7 +21,7 @@
 
 <script>
 import AddNewColumnModal from "./AddNewColumnModal";
-import { mapActions,mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import { modalTypes } from "@/api/types";
 export default {
   components: {
@@ -38,16 +38,17 @@ export default {
       this.setModalState({
         isActive: true,
         type: modalTypes.ADD_COL_MODAL,
+        data: {},
       });
     },
   },
-  computed : {
-    project : {
-      get(){
+  computed: {
+    project: {
+      get() {
         return this.getProject();
-      }
-    }
-  }
+      },
+    },
+  },
 };
 </script>
 

@@ -12,13 +12,13 @@
           <v-card-text>
             <v-form ref="updateProjectForm" @submit.prevent="updateProject">
               <v-text-field
-                v-model="inputUser.name"
+                v-model="modalState.data.name"
                 :rules="inputRules"
                 label="Project Name"
                 outlined
               ></v-text-field>
               <v-textarea
-                v-model="inputUser.description"
+                v-model="modalState.data.description"
                 label="Description"
                 outlined
                 height="5"
@@ -43,9 +43,6 @@ import { mapGetters, mapActions } from "vuex";
 import { rules } from "../../utils/validation-rule";
 import { modalTypes } from "@/api/types";
 export default {
-  props: {
-    project: Object,
-  },
   data() {
     return {
       inputRules: rules.inputRules,
@@ -63,14 +60,6 @@ export default {
         );
       },
     },
-    inputUser: {
-      get() {
-        return {
-          name: this.$props.project.name,
-          description: this.$props.project.description,
-        };
-      },
-    },
   },
   methods: {
     ...mapActions({
@@ -81,15 +70,22 @@ export default {
       this.setModalState({
         isActive: false,
         type: modalTypes.UPDATE_PROJECT_MODAL,
+        data: {},
       });
     },
     async updateProject() {
+      if (!this.$refs.updateProjectForm.validate()) {
+        return false;
+      }
       let result = await this.update({
-        projectId: this.$props.project._id,
-        update: { ...this.inputUser },
+        projectId: this.modalState.data._id,
+        update: {
+          name: this.modalState.data.name,
+          description: this.modalState.data.description,
+        },
       });
       if (result) {
-        this.setModalState(false);
+        this.closeModal();
       }
     },
   },

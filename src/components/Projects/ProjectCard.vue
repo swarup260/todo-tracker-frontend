@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <UpdateProjectModal :project.sync="projectData" />
+    <UpdateProjectModal />
     <v-hover v-slot:default="{ hover }">
       <v-card
         outlined
@@ -38,7 +38,7 @@
           <v-btn
             :class="{ 'show-btns': hover }"
             color="transparent"
-            @click="updateProject(project)"
+            @click="updateProject()"
             text
             >Update</v-btn
           >
@@ -60,25 +60,21 @@ export default {
     project: Object,
   },
   data() {
-    return {
-      projectData: {},
-    };
+    return {};
   },
   methods: {
     ...mapActions({
       setModalState: "projects/setModalState",
+      deleteProject: "projects/deleteProject",
     }),
     redirectProjectPage(id) {
       this.$router.push(`project/${id}`);
     },
-    deleteProject(id) {
-      console.log(id);
-    },
-    updateProject(project) {
-      this.projectData = project;
+    updateProject() {
       this.setModalState({
         isActive: true,
         type: modalTypes.UPDATE_PROJECT_MODAL,
+        data: this.$props.project,
       });
     },
   },

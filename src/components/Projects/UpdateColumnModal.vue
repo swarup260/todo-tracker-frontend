@@ -12,7 +12,7 @@
           <v-card-text>
             <v-form ref="AddColumnForm" @submit.prevent="UpdateColumn">
               <v-text-field
-                v-model="inputUser.name"
+                v-model="modalState.data.name"
                 :rules="inputRules"
                 label="Column Name"
                 outlined
@@ -71,6 +71,7 @@ export default {
       this.setModalState({
         isActive: false,
         type: modalTypes.UPDATE_COL_MODAL,
+        data: {},
       });
     },
     async addColumn() {
@@ -82,7 +83,7 @@ export default {
         },
       });
       if (result) {
-        this.setModalState(false);
+        this.closeModal();
         this.inputUser.name = "";
       }
     },

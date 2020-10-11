@@ -64,6 +64,7 @@ export default {
       this.setModalState({
         isActive: true,
         type: modalTypes.UPDATE_COL_MODAL,
+        data : this.$props.column
       });
     },
     async deleteColumn() {

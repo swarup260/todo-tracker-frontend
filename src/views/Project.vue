@@ -7,7 +7,7 @@
     <v-col class="fill-width">
       <v-card outlined>
         <v-card-title class="title text-capitalize">
-          {{ project.projectName }}
+          {{ project.name }}
         </v-card-title>
       </v-card>
     </v-col>
@@ -52,6 +52,7 @@ export default {
       this.setModalState({
         isActive: true,
         type: modalTypes.ADD_COL_MODAL,
+        data: {},
       });
     },
   },

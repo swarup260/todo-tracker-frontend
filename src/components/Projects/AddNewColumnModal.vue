@@ -71,6 +71,7 @@ export default {
       this.setModalState({
         isActive: false,
         type: modalTypes.ADD_COL_MODAL,
+        data: {},
       });
     },
     async addColumn() {
