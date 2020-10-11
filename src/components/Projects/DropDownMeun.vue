@@ -1,29 +1,30 @@
 <template>
   <v-container>
-  <v-menu bottom right>
-    <template v-slot:activator="{ on, attrs }">
-      <v-btn icon v-bind="attrs" v-on="on" class="position-add-action pa-3">
-        <span class="material-icons"> more_vert </span>
-      </v-btn>
-    </template>
-    <v-list>
-      <v-list-item v-for="(item, i) in items" :key="i">
-        <v-list-item-title @click="item.callback">{{
-          item.title
-        }}</v-list-item-title>
-      </v-list-item>
-    </v-list>
-  </v-menu>
-    <UpdateColumnModal :projectId="projectId" :column="column"  />
+    <v-menu bottom right>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn icon v-bind="attrs" v-on="on" class="position-add-action pa-3">
+          <span class="material-icons"> more_vert </span>
+        </v-btn>
+      </template>
+      <v-list>
+        <v-list-item v-for="(item, i) in items" :key="i">
+          <v-list-item-title @click="item.callback">{{
+            item.title
+          }}</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
+    <UpdateColumnModal :projectId="projectId" :column="column" />
   </v-container>
 </template>
 
 <script>
 import { mapActions } from "vuex";
 import UpdateColumnModal from "./UpdateColumnModal";
+import { modalTypes } from "@/api/types";
 export default {
   components: {
-      UpdateColumnModal
+    UpdateColumnModal,
   },
   props: {
     column: Object,
@@ -54,10 +55,16 @@ export default {
       delete: "projects/deleteColumn",
     }),
     addNote() {
-      this.setNoteModalState(true);
+      this.setNoteModalState({
+        isActive: true,
+        columnID: this.$props.column._id,
+      });
     },
     editColumn() {
-      this.setModalState(true);
+      this.setModalState({
+        isActive: true,
+        type: modalTypes.UPDATE_COL_MODAL,
+      });
     },
     async deleteColumn() {
       await this.delete({

@@ -2,9 +2,13 @@
   <v-card outlined class="pa-2">
     <v-form ref="signUpForm" @submit.prevent="submitHandler">
       <v-text-field outlined v-model="noteName"></v-text-field>
-      <v-row no-gutters justify="space-between">
-        <v-btn small type="submit"  color="success">Add</v-btn>
-        <v-btn small @click="setNoteModalState(false)">Cancel</v-btn>
+      <v-row no-gutters justify="space-between" class="medium-screen-alignment">
+        <v-btn small type="submit" color="success">Add</v-btn>
+        <v-btn
+          small
+          @click="closeNoteModalState({ isActive: false, columnId: columnId })"
+          >Cancel</v-btn
+        >
       </v-row>
     </v-form>
   </v-card>
@@ -24,7 +28,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      setNoteModalState: "projects/setNoteModalState",
+      closeNoteModalState: "projects/setNoteModalState",
       add: "projects/addNote",
     }),
     async submitHandler() {
@@ -47,5 +51,11 @@ export default {
 <style scoped>
 .hidden {
   display: none;
+}
+@media only screen and (min-width: 1000px) {
+  .medium-screen-alignment {
+    display: flex;
+    flex-direction: column;
+  }
 }
 </style>

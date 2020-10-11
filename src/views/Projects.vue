@@ -5,12 +5,17 @@
         <AddProject />
       </v-col>
     </v-row>
-    <span v-if="getProjects.length > 0" class="mt-10">
+    <span v-if="projects.length > 0" class="mt-10">
       <h3 class="pa-3">Projects</h3>
       <v-divider></v-divider>
     </span>
     <v-row>
-      <v-col class="flex-basis-fix" sm="3" v-for="project in getProjects" :key="project._id">
+      <v-col
+        class="flex-basis-fix"
+        sm="3"
+        v-for="project in projects"
+        :key="project._id"
+      >
         <ProjectCard :project="project" />
       </v-col>
     </v-row>
@@ -36,7 +41,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getProjects: "projects/getProjects",
+      projects: "projects/getProjects",
     }),
   },
   async created() {
@@ -46,7 +51,7 @@ export default {
 </script>
 
 <style scoped>
- .flex-basis-fix {
-   flex-basis: auto
- }
+.flex-basis-fix {
+  flex-basis: auto;
+}
 </style>

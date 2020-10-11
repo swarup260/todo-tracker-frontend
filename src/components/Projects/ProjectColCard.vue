@@ -4,7 +4,10 @@
       {{ column.name }}
       <DropDownMeun :column="column" :projectId="projectId" />
     </v-card-title>
-    <v-card-subtitle class="mt-1" v-if="noteModalState">
+    <v-card-subtitle
+      class="mt-1"
+      v-if="noteModalState.isActive && noteModalState.columnID == column._id"
+    >
       <AddNote :columnId="column._id" :projectId="projectId" />
     </v-card-subtitle>
     <v-card-text>

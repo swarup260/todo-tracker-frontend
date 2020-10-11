@@ -5,8 +5,14 @@ import { getData, storeData } from "../utils/localStorage";
 
 const defaultState = {
   projects: [],
-  modalState: false,
-  noteModalState: false,
+  modalState: {
+    isActive: false,
+    type: "",
+  },
+  noteModalState: {
+    isActive: false,
+    columnID: "",
+  },
   project: {},
 };
 
@@ -24,11 +30,13 @@ export default {
       projects.push(project);
       storeData("projects", projects);
     },
-    SET_MODAL_STATE(state, status) {
-      state.modalState = status;
+    SET_MODAL_STATE(state, { isActive, type }) {
+      state.modalState.isActive = isActive;
+      state.modalState.type = type;
     },
-    SET_NOTE_MODAL_STATE(state, status) {
-      state.noteModalState = status;
+    SET_NOTE_MODAL_STATE(state, { isActive, columnID }) {
+      state.noteModalState.isActive = isActive;
+      state.noteModalState.columnID = columnID;
     },
     SET_PROJECT(state, project) {
       state.project = project;
@@ -47,17 +55,8 @@ export default {
       }
       return state.projects;
     },
-    getModalState(state, params) {
-      switch (params) {
-        case "note":
-          return state.noteModalState;
-        case "addNewColumn":
-          return state.modalState;
-        case "addUpdateColumn":
-          return state.modalState;
-        default:
-          return state.modalState;
-      }
+    getModalState(state) {
+      return state.modalState;
     },
     getNoteModalState(state) {
       return state.noteModalState;
@@ -360,13 +359,13 @@ export default {
       }
     },
     /* Helper Actions */
-    setModalState({ commit }, status) {
-      console.log(status);
-      commit("SET_MODAL_STATE", status);
+    setModalState({ commit }, object) {
+      console.log(object);
+      commit("SET_MODAL_STATE", object);
     },
-    setNoteModalState({ commit }, status) {
-      console.log(status);
-      commit("SET_NOTE_MODAL_STATE", status);
+    setNoteModalState({ commit }, object) {
+      console.log(object);
+      commit("SET_NOTE_MODAL_STATE", object);
     },
     resetProjects({ commit }) {
       commit("RESET_STATE");

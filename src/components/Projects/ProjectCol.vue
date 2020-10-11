@@ -31,7 +31,6 @@
 import draggable from "vuedraggable";
 import AddNewColumn from "./AddNewColumn";
 import ProjectColCard from "./ProjectColCard";
-import { mapActions, mapGetters } from "vuex";
 export default {
   components: {
     draggable,
@@ -47,20 +46,8 @@ export default {
       isHidden: this.noteNodalState,
     };
   },
-  methods: {
-    ...mapActions({
-      setNoteModalState: "projects/setNoteModalState",
-    }),
-    showAddNote(event) {
-      console.log(event);
-      this.setNoteModalState(true);
-    },
-  },
-  computed: {
-    ...mapGetters({
-      noteModalState: "projects/getNoteModalState",
-    }),
-  },
+  methods: {},
+  computed: {},
 };
 </script>
 

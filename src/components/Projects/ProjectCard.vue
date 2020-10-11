@@ -51,6 +51,7 @@
 <script>
 import { mapActions } from "vuex";
 import UpdateProjectModal from "./UpdateProjectModal";
+import { modalTypes } from "@/api/types";
 export default {
   components: {
     UpdateProjectModal,
@@ -75,7 +76,10 @@ export default {
     },
     updateProject(project) {
       this.projectData = project;
-      this.setModalState(true);
+      this.setModalState({
+        isActive: true,
+        type: modalTypes.UPDATE_PROJECT_MODAL,
+      });
     },
   },
 };

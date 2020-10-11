@@ -2,7 +2,7 @@
   <v-container>
     <v-row justify="center">
       <v-dialog
-        v-model="modalState"
+        v-model="computedState"
         persistent
         max-width="290"
         :retain-focus="false"
@@ -22,7 +22,7 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="green darken-1" text @click="setModal(false)">
+            <v-btn color="green darken-1" text @click="closeModal">
               Close
             </v-btn>
           </v-card-actions>
@@ -35,6 +35,7 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import { rules } from "../../utils/validation-rule";
+import { modalTypes } from "@/api/types";
 export default {
   props: {
     projectId: String,
@@ -52,15 +53,25 @@ export default {
       modalState: "projects/getModalState",
       project: "projects/getProject",
     }),
+    computedState: {
+      get() {
+        return (
+          this.modalState.isActive &&
+          this.modalState.type == modalTypes.ADD_COL_MODAL
+        );
+      },
+    },
   },
   methods: {
     ...mapActions({
       setModalState: "projects/setModalState",
       add: "projects/addColumn",
     }),
-    setModal(status) {
-      // console.log(status);
-      this.setModalState(status);
+    closeModal() {
+      this.setModalState({
+        isActive: false,
+        type: modalTypes.ADD_COL_MODAL,
+      });
     },
     async addColumn() {
       let result = await this.add({
@@ -71,7 +82,7 @@ export default {
         },
       });
       if (result) {
-        this.setModalState(false);
+        this.closeModal();
         this.inputUser.name = "";
       }
     },
