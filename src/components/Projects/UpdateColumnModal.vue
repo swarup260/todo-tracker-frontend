@@ -10,13 +10,19 @@
         <v-card>
           <v-card-title class="headline"> Edit Column </v-card-title>
           <v-card-text>
-            <v-form ref="AddColumnForm" @submit.prevent="UpdateColumn">
+            <v-form ref="AddColumnForm" @submit.prevent="updateColumn">
               <v-text-field
                 v-model="modalState.data.name"
                 :rules="inputRules"
                 label="Column Name"
                 outlined
               ></v-text-field>
+              <v-color-picker
+                dot-size="25"
+                swatches-max-height="200"
+                elevation="5"
+                v-model="modalState.data.color"
+              ></v-color-picker>
               <v-btn color="success" block type="submit">Update</v-btn>
             </v-form>
           </v-card-text>
@@ -44,9 +50,6 @@ export default {
   data() {
     return {
       inputRules: rules.inputRules,
-      inputUser: {
-        name: this.$props.column.name,
-      },
     };
   },
   computed: {
@@ -74,17 +77,19 @@ export default {
         data: {},
       });
     },
-    async addColumn() {
-      let result = await this.add({
-        projectId: this.$props.projectId,
-        update: {
-          ...this.inputUser,
-          position: this.project.columns.length + 1,
+    async updateColumn() {
+      let result = await this.update({
+        updateData: {
+          projectId: this.$props.projectId,
+          columnId: this.modalState.data._id,
+          update: {
+            name: this.modalState.data.name,
+          },
         },
+        multi: false,
       });
       if (result) {
         this.closeModal();
-        this.inputUser.name = "";
       }
     },
   },

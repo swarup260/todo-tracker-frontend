@@ -2,7 +2,7 @@
   <v-container>
     <v-menu bottom right>
       <template v-slot:activator="{ on, attrs }">
-        <v-btn icon v-bind="attrs" v-on="on" class="position-add-action pa-3">
+        <v-btn icon v-bind="attrs" v-on="on" class="position-add-action mr-3">
           <span class="material-icons"> more_vert </span>
         </v-btn>
       </template>
@@ -64,7 +64,7 @@ export default {
       this.setModalState({
         isActive: true,
         type: modalTypes.UPDATE_COL_MODAL,
-        data : this.$props.column
+        data: this.$props.column,
       });
     },
     async deleteColumn() {

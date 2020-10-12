@@ -5,9 +5,25 @@
         outlined
         :class="{ 'on-hover': hover }"
         :elevation="hover ? 4 : 1"
-        @click="openModal"
       >
-        <v-card-title>{{ note.name }}</v-card-title>
+        <v-card-title>
+          {{ note.name }}
+          <span
+            class="position-add-action material-icons pa-2"
+            v-if="hover"
+            @click="deleteNote(note._id)"
+            >delete</span
+          >
+        </v-card-title>
+        <v-btn
+          v-if="hover"
+          small
+          @click="openModal"
+          color="success"
+          class="ma-3"
+        >
+          edit
+        </v-btn>
       </v-card>
     </v-hover>
     <UpdateNoteModal />
@@ -24,6 +40,8 @@ export default {
   },
   props: {
     note: Object,
+    noteIndex: Number,
+    columnId: String,
   },
   data() {
     return {};
@@ -40,9 +58,18 @@ export default {
         data: this.$props.note,
       });
     },
+    deleteNote(id) {
+      console.log(id, this.$props.noteIndex, this.$props.columnId);
+    },
   },
 };
 </script>
 
 <style>
+.hide {
+  opacity: 0;
+}
+.show {
+  opacity: 1;
+}
 </style>

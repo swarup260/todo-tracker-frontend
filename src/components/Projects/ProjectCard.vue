@@ -34,14 +34,8 @@
         >
           {{ project.description }}
         </v-card-text>
-        <v-card-actions>
-          <v-btn
-            :class="{ 'show-btns': hover }"
-            color="transparent"
-            @click="updateProject()"
-            text
-            >Update</v-btn
-          >
+        <v-card-actions v-if="hover">
+          <v-btn @click="updateProject()" text>Update</v-btn>
         </v-card-actions>
       </v-card>
     </v-hover>

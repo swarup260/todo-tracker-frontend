@@ -17,6 +17,12 @@
                 label="Column Name"
                 outlined
               ></v-text-field>
+              <v-color-picker
+                dot-size="25"
+                swatches-max-height="200"
+                elevation="5"
+                v-model="inputUser.color"
+              ></v-color-picker>
               <v-btn color="success" block type="submit">Add</v-btn>
             </v-form>
           </v-card-text>
@@ -45,6 +51,7 @@ export default {
       inputRules: rules.inputRules,
       inputUser: {
         name: "",
+        color : ""
       },
     };
   },
@@ -79,7 +86,7 @@ export default {
         projectId: this.$props.projectId,
         update: {
           ...this.inputUser,
-          position: this.project.columns.length + 1,
+          position: this.project.columns.length,
         },
       });
       if (result) {

@@ -10,16 +10,17 @@
       @change="updateColumnIndex"
       :animation="100"
       draggable=".item"
+      :move="revertBack"
     >
       <v-col
-        v-for="column in project.columns"
+        v-for="(column,index) in project.columns"
         :key="column._id"
         sm="4"
         md="3"
         lg="2"
         class="item"
       >
-        <ProjectColCard :column="column" :projectId="project._id" />
+        <ProjectColCard :column="column" :projectId="project._id" :columnIndex="index" />
       </v-col>
       <AddNewColumn />
     </draggable>
@@ -44,6 +45,7 @@ export default {
     return {
       dragging: false,
       isHidden: this.noteNodalState,
+      stateChange: true,
     };
   },
   methods: {
@@ -73,6 +75,9 @@ export default {
         this.updateproject(this.$props.project);
       }
     },
+    revertBack() {
+      return this.stateChange;
+    },
   },
   computed: {},
 };
@@ -83,6 +88,7 @@ export default {
   overflow-x: auto;
   white-space: nowrap;
   flex-wrap: nowrap;
+  height: 900px;
 }
 .position-button {
   position: absolute;
