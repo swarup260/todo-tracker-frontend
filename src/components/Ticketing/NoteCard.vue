@@ -10,7 +10,7 @@
         <v-card-title>{{ note.name }}</v-card-title>
       </v-card>
     </v-hover>
-    <UpdateNoteModal :note="noteData" />
+    <UpdateNoteModal />
   </v-col>
 </template>
 
