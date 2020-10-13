@@ -33,8 +33,8 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 ### Version 1.2
 - [x] Bug Fixes 
 ### Version 1.3
-- [ ] Project Management Api Integration
-- [ ] Project Management View
+- [X] Project Management Api Integration
+- [X] Project Management View
 ### Version 1.4
 - [ ] Project Notes Api Integration
 - [ ] Project Management Bug Fixes
