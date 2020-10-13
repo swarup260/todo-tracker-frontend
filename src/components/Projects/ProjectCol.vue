@@ -10,17 +10,20 @@
       @change="updateColumnIndex"
       :animation="100"
       draggable=".item"
-      :move="revertBack"
     >
       <v-col
-        v-for="(column,index) in project.columns"
+        v-for="(column, index) in project.columns"
         :key="column._id"
         sm="4"
         md="3"
         lg="2"
         class="item"
       >
-        <ProjectColCard :column="column" :projectId="project._id" :columnIndex="index" />
+        <ProjectColCard
+          :column="column"
+          :projectId="project._id"
+          :columnIndex="index"
+        />
       </v-col>
       <AddNewColumn />
     </draggable>
@@ -45,7 +48,7 @@ export default {
     return {
       dragging: false,
       isHidden: this.noteNodalState,
-      stateChange: true,
+      stateChange: (state) => state,
     };
   },
   methods: {
@@ -65,11 +68,11 @@ export default {
         update: { position: newIndex },
       };
       let result = await this.update({
-        newData: {
+        updateData: {
           projectId: this.$props.project._id,
           cols: [columnOldIndex, columnNexIndex],
         },
-        multiUpdate: true,
+        multi: true,
       });
       if (result) {
         this.updateproject(this.$props.project);
@@ -79,7 +82,6 @@ export default {
       return this.stateChange;
     },
   },
-  computed: {},
 };
 </script>
 

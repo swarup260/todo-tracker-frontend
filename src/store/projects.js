@@ -386,7 +386,9 @@ export default {
         );
       }
     },
-    async updateColumn({commit}, {
+    async updateColumn({
+      commit
+    }, {
       updateData,
       multi
     }) {
@@ -429,6 +431,7 @@ export default {
           }
         );
       }
+      return false;
     },
     /* Note Actions */
     async addNote({

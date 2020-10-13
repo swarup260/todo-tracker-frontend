@@ -24,7 +24,7 @@
           :list="column.notes"
           group="b"
           @change="updateNoteIndex($event, column._id, column.notes)"
-          :move="revertBack"
+          @end="revertBack"
         >
           <v-row
             no-gutters
@@ -74,6 +74,15 @@ export default {
       updateProjectState: "projects/updateProjectState",
     }),
     async updateNoteIndex(event, id, notes) {
+      console.log({
+        projectId: this.$props.projectId,
+        columnId: id,
+        update: {
+          notes: notes.map((note, index) => {
+            return { noteId: note._id, position: index };
+          }),
+        },
+      });
       const result = await this.updateColumn({
         updateData: {
           projectId: this.$props.projectId,
@@ -92,12 +101,12 @@ export default {
       this.stateChange = result;
     },
     revertBack() {
-      return this.stateChange;
+      return true;
     },
     updateColumnNotes(notes) {
       const index = this.$props.columnIndex;
       const project = getData("project");
-      project.columns[index] = notes;
+      project.columns[index].notes = notes;
       this.updateProjectState(project);
     },
   },

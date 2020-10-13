@@ -5,6 +5,7 @@
         outlined
         :class="{ 'on-hover': hover }"
         :elevation="hover ? 4 : 1"
+        class="pointer"
       >
         <v-card-title>
           {{ note.name }}
@@ -71,5 +72,8 @@ export default {
 }
 .show {
   opacity: 1;
+}
+.pointer {
+  cursor: pointer;
 }
 </style>
