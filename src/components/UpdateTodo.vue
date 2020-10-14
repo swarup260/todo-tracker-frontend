@@ -1,11 +1,24 @@
 <template>
   <v-container>
     <v-form ref="updateToDoForm" @submit.prevent="updateTodoInfo">
-      <v-text-field :value="formData.taskName" :rules="inputRules" label="Task Name" outlined></v-text-field>
-      <v-textarea :value="formData.description" label="Description" outlined></v-textarea>
+      <v-text-field
+        :value="formData.taskName"
+        :rules="inputRules"
+        label="Task Name"
+        outlined
+      ></v-text-field>
+      <v-textarea
+        :value="formData.description"
+        label="Description"
+        outlined
+      ></v-textarea>
       <v-row class="mb-6" justify="center" no-gutters>
         <v-col lg="6">
-          <v-switch :value="formData.status" class="ma-2" label="Status"></v-switch>
+          <v-switch
+            :value="formData.status"
+            class="ma-2"
+            label="Status"
+          ></v-switch>
         </v-col>
         <v-col lg="6">
           <v-dialog
@@ -27,8 +40,15 @@
             </template>
             <v-date-picker v-model="deadline" scrollable>
               <v-spacer></v-spacer>
-              <v-btn text color="primary" @click="datePickerModal = false">Cancel</v-btn>
-              <v-btn text color="primary" @click="$refs.updatedialog.save(deadline)">OK</v-btn>
+              <v-btn text color="primary" @click="datePickerModal = false"
+                >Cancel</v-btn
+              >
+              <v-btn
+                text
+                color="primary"
+                @click="$refs.updatedialog.save(deadline)"
+                >OK</v-btn
+              >
             </v-date-picker>
           </v-dialog>
         </v-col>

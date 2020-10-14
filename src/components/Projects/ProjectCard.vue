@@ -8,6 +8,8 @@
         :elevation="hover ? 20 : 2"
         :class="{ 'on-hover': hover }"
         max-width="344"
+        class="mx-auto"
+
       >
         <v-card-title
           class="headline text-truncate d-inline-block"

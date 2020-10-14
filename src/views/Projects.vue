@@ -11,8 +11,9 @@
     </span>
     <v-row>
       <v-col
-        class="flex-basis-fix"
-        sm="3"
+        cols="12"
+        sm="4"
+        lg="3"
         v-for="project in projects"
         :key="project._id"
       >

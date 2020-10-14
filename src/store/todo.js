@@ -16,6 +16,7 @@ export default {
     },
     SET_TODOS(state, todos) {
       state.todos = todos;
+      storeData("Todos",todos)
     },
     RESET_STATE(state) {
       state.todos = [];
@@ -179,6 +180,9 @@ export default {
     },
     resetTodoState({commit}){
       commit("RESET_STATE")
+    },
+    updateTodoState({commit} , todos){
+      commit('SET_TODOS',todos);
     }
   },
 };
