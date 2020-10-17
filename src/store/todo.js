@@ -5,6 +5,15 @@ import { storeData, getData } from "../utils/localStorage";
 
 const defaultState = {
   todos: [],
+  isLoading: {
+    state: false,
+    type: "",
+  },
+  modalState: {
+    isActive: false,
+    type: "",
+    data: {},
+  },
 };
 
 export default {
@@ -12,177 +21,189 @@ export default {
   state: defaultState,
   mutations: {
     ADD_TODO(state, todos) {
-      state.todos.unshift(todos);
+      state.todos.push(todos);
+      storeData("Todos", state.todos);
     },
     SET_TODOS(state, todos) {
       state.todos = todos;
-      storeData("Todos",todos)
+      storeData("Todos", todos);
+    },
+    SET_MODAL_STATE(state, modalStateObj) {
+      state.modalState = modalStateObj;
+    },
+    SET_LOADING_STATE(state, currentState) {
+      state.isLoading = currentState;
     },
     RESET_STATE(state) {
       state.todos = [];
+      state.isLoading = {
+        state: false,
+        type: "",
+      };
+      state.modalState = {
+        isActive: false,
+        type: "",
+        data: {},
+      };
     },
   },
   getters: {
-    completeTask(state) {
-      if (state.todos.length == 0 ) {
+    getTodos(state) {
+      if (getData("Todos")) {
         state.todos = getData("Todos");
       }
-      return state.todos.filter((item) => item.status);
+      return state.todos;
     },
-    inCompleteTask(state) {
-      if (state.todos.length == 0 ) {
-        state.todos = getData("Todos");
-      }
-      return state.todos.filter((item) => !item.status);
+    getLoadingState(state) {
+      return state.isLoading;
+    },
+    getModalState(state) {
+      return state.modalState;
     },
   },
   actions: {
+    /* TODO Methods */
+    async fetchTodo({ dispatch, getters, commit }) {
+      try {
+        const todos = getters.getTodos;
+        if (todos && todos.constructor.name == "Array" && todos.length > 0) {
+          return todos;
+        }
+        const { status, data } = await axios.get(endpoints.todos.todos);
+        if (status == 200) {
+          commit("SET_TODOS", data.data);
+          return true;
+        }
+      } catch (error) {
+        dispatch(
+          "setMessage",
+          {
+            message: error.toString(),
+            type: "error",
+          },
+          { root: true }
+        );
+        return false;
+      }
+    },
     async addTodo({ dispatch, commit }, task) {
       try {
-        let response = await axios.post(endpoints.todos.todos, task);
-        if (response.status == 200) {
-          dispatch("processTodo", response.data.data);
-          let todos = getData("Todos");
-          todos.push(response.data.data);
-          storeData("Todos", todos);
-          commit("SET_TODOS", todos);
-          commit(
-            "SET_MESSAGE",
+        let { status, data } = await axios.post(endpoints.todos.todos, task);
+        if (status == 200) {
+          commit("ADD_TODO", data.data);
+          dispatch(
+            "setMessage",
             {
-              message: response.data.message,
+              message: data.message,
               type: "success",
             },
-            {
-              root: true,
-            }
+            { root: true }
           );
           return true;
         }
       } catch (error) {
-        commit(
-          "SET_MESSAGE",
+        dispatch(
+          "setMessage",
           {
-            message: error.response.data.message,
+            message: error.toString(),
             type: "error",
           },
-          {
-            root: true,
-          }
+          { root: true }
         );
+        return false;
+      }
+    },
+    async deleteTodo({ dispatch, commit }, id) {
+      try {
+        const { status, data } = await axios.delete(
+          `${endpoints.todos.todos}/${id}`
+        );
+        if (status == 200) {
+          /* update the set and localstorage */
+          const todos = getData("Todos");
+          const filterTodos = todos.filter((item) => item._id != id);
+          commit("SET_TODOS", filterTodos);
+
+          /* set the messages */
+          dispatch(
+            "setMessage",
+            {
+              message: data.message,
+              type: "success",
+            },
+            { root: true }
+          );
+
+          return true;
+        }
+      } catch (error) {
+        dispatch(
+          "setMessage",
+          {
+            message: error.toString,
+            type: "error",
+          },
+          { root: true }
+        );
+        return false;
+      }
+    },
+    async updateTodo({ dispatch, commit }, updateData) {
+      try {
+        const { status, data } = await axios.patch(
+          endpoints.todos.todos,
+          updateData
+        );
+        if (status == 200) {
+          /* update the set and localstorage */
+          const id = data.data._id;
+          const todos = getData("Todos");
+          for (let index = 0; index < todos.length; index++) {
+            if (todos[index]._id == id) {
+              todos[index] = data.data;
+            }
+          }
+          commit("SET_TODOS", todos);
+
+          /* set the messages */
+          dispatch(
+            "setMessage",
+            {
+              message: data.message,
+              type: "success",
+            },
+            { root: true }
+          );
+          return true;
+        }
+      } catch (error) {
+        dispatch(
+          "setMessage",
+          {
+            message: error.toString(),
+            type: "error",
+          },
+          { root: true }
+        );
+        return false;
       }
     },
     async processTodo({ commit }, todo) {
       commit("ADD_TODO", todo);
       //   storeData('todos',todo);
     },
-    async fetchTodo({ commit }) {
-      try {
-        let todos = getData("Todos");
-        if (todos && todos.constructor.name == "Array" && todos.length > 0) {
-          console.log(todos);
-          commit("SET_TODOS", todos);
-          storeData("Todos", todos);
-          return true;
-        }
-        let response = await axios.get(endpoints.todos.todos);
-        commit("SET_TODOS", response.data.data);
-        storeData("Todos", response.data.data);
-        return true;
-      } catch (error) {
-        console.log(error);
-        commit(
-          "SET_MESSAGE",
-          {
-            message: error.toString(),
-            type: "error",
-          },
-          {
-            root: true,
-          }
-        );
-      }
+    /* Helpers */
+    resetTodoState({ commit }) {
+      commit("RESET_STATE");
     },
-    async updateTodo({ commit }, updateData) {
-      try {
-        let response = await axios.patch(endpoints.todos.todos, updateData);
-        if (response.status == 200) {
-          /* update the set and localstorage */
-          const id = response.data.data._id;
-          const todos = getData("Todos");
-          for (let index = 0; index < todos.length; index++) {
-            if (todos[index]._id == id) {
-              todos[index] = response.data.data;
-            }
-          }
-          storeData("Todos", todos);
-          commit("SET_TODOS", todos);
-
-          /* set the messages */
-          commit(
-            "SET_MESSAGE",
-            {
-              message: response.data.message,
-              type: "success",
-            },
-            {
-              root: true,
-            }
-          );
-        }
-      } catch (error) {
-        commit(
-          "SET_MESSAGE",
-          {
-            message: error.response.data.message,
-            type: "error",
-          },
-          {
-            root: true,
-          }
-        );
-      }
+    updateTodoState({ commit }, todos) {
+      commit("SET_TODOS", todos);
     },
-    async deleteTodo({ commit }, id) {
-      try {
-        let response = await axios.delete(`${endpoints.todos.todos}/${id}`);
-        if (response.status == 200) {
-          /* update the set and localstorage */
-          const todos = getData("Todos");
-          const filterTodos = todos.filter((item) => item._id != id);
-          storeData("Todos", filterTodos);
-          commit("SET_TODOS", filterTodos);
-
-          /* set the messages */
-          commit(
-            "SET_MESSAGE",
-            {
-              message: response.data.message,
-              type: "success",
-            },
-            {
-              root: true,
-            }
-          );
-        }
-      } catch (error) {
-        console.error(error);
-        commit(
-          "SET_MESSAGE",
-          {
-            message: error.response.data.message,
-            type: "error",
-          },
-          {
-            root: true,
-          }
-        );
-      }
+    setLoadingState({ commit }, state) {
+      commit("SET_LOADING_STATE", state);
     },
-    resetTodoState({commit}){
-      commit("RESET_STATE")
+    setModalState({ commit }, object) {
+      commit("SET_MODAL_STATE", object);
     },
-    updateTodoState({commit} , todos){
-      commit('SET_TODOS',todos);
-    }
   },
 };

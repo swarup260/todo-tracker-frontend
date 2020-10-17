@@ -17,6 +17,12 @@
           >
           <v-btn
             icon
+            :class="{ 'is-active': isActive.underline() }"
+            @click="commands.underline"
+            ><span class="material-icons"> format_underline </span></v-btn
+          >
+          <v-btn
+            icon
             :class="{ 'is-active': isActive.italic() }"
             @click="commands.italic"
             ><span class="material-icons"> format_italic </span></v-btn
@@ -45,20 +51,10 @@
             @click="commands.heading({ level: 3 })"
             >H3</v-btn
           >
-          <v-btn
-            icon
-            :class="{ 'is-active': isActive.blockquote() }"
-            @click="commands.blockquote"
-          >
-            <span class="material-icons"> format_quote </span>
-          </v-btn>
         </v-btn-toggle>
       </editor-menu-bar>
     </v-col>
-    <editor-content
-      class="editor-style editor__content"
-      :editor="editor"
-    />
+    <editor-content class="editor-style editor__content" :editor="editor" />
   </v-row>
 </template>
 
@@ -73,12 +69,16 @@ import {
   Bold,
   Code,
   Italic,
-  Blockquote,
+  Underline
 } from "tiptap-extensions";
+import { mapActions } from "vuex";
 export default {
   components: {
     EditorContent,
     EditorMenuBar,
+  },
+  props :{
+    content : String
   },
   data() {
     return {
@@ -94,12 +94,17 @@ export default {
           new Bold(),
           new Code(),
           new Italic(),
-          new Blockquote(),
+          new Underline()
         ],
-        content: "Description",
+        content: this.$props.content || "<label>Description</label>",
+        autoFocus : true,
         onUpdate: ({ getJSON, getHTML }) => {
           this.json = getJSON();
           this.html = getHTML();
+          this.setContent(this.json);
+        },
+        onFocus: () => {
+        //   this.editor.clearContent(true);
         },
       }),
     };
@@ -108,6 +113,11 @@ export default {
     // Always destroy your editor instance when it's no longer needed
     this.editor.destroy();
   },
+  methods : {
+    ...mapActions({
+      "setContent" : "todo/setContent"
+    })
+  }
 };
 </script>
 

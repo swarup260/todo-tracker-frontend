@@ -9,7 +9,13 @@
           outlined
         ></v-text-field>
       </v-row>
-      <Editor />
+      <v-row class="mb-6" justify="center" no-gutters>
+        <v-textarea
+          v-model="inputUser.description"
+          label="Description"
+          outlined
+        ></v-textarea>
+      </v-row>
       <v-row class="mb-6" justify="center" no-gutters>
         <v-col lg="6">
           <v-switch
@@ -49,52 +55,59 @@
         </v-col>
       </v-row>
       <v-row class="mb-6" justify="center" no-gutters>
-        <v-btn color="success" class="ml-3" block type="submit">Add</v-btn>
+        <v-btn
+          color="success"
+          class="ml-3"
+          block
+          type="submit"
+          :loading="isLoading"
+          >Add</v-btn
+        >
       </v-row>
     </v-form>
   </v-container>
 </template>
 
 <script>
-import Editor from "./Editor"
-import { rules } from "../utils/validation-rule";
+import { rules } from "@/utils/validation-rule";
 import { mapActions } from "vuex";
+const defaultInputUser = {
+  taskName: "",
+  status: false,
+  description: "",
+  deadline: new Date().toISOString().substr(0, 10),
+};
 export default {
-  components: {
-    Editor
-  },
+  components: {},
   data() {
     return {
+      isLoading: false,
       modal: false,
       inputRules: rules.inputRules,
-      inputUser: {
-        taskName: "",
-        description: "Description",
-        status: false,
-        deadline: new Date().toISOString().substr(0, 10),
-      },
+      inputUser: defaultInputUser,
     };
   },
-  watch: {},
   methods: {
     ...mapActions({
-      addTodo: "todo/addTodo",
+      add: "todo/addTodo",
+      setState: "todo/setModalState",
     }),
     async submitTodo() {
-      // if (this.$refs.addToDoForm.validate()) {
-      //   let result = await this.addTodo({ ...this.inputUser });
-      //   if (result) {
-      //     this.inputUser = {
-      //       taskName: "",
-      //       description: "",
-      //       status: false,
-      //       deadline: new Date().toISOString().substr(0, 10),
-      //     };
-      //     this.$emit("closeModel", false);
-      //   }
-      // },
+      if (this.$refs.addToDoForm.validate()) {
+        console.log({ ...this.inputUser });
+        this.isLoading = true;
+        let result = await this.add({
+          ...this.inputUser,
+        });
+        if (result) {
+          this.inputUser = defaultInputUser;
+          this.isLoading = false;
+          this.setState({ state: false, type: "", data: {} });
+        }
+      }
     },
-  }
+  },
 };
 </script>
-
+<style scoped>
+</style>
