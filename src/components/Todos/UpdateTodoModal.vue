@@ -26,6 +26,9 @@ export default {
         const state = this.state();
         return state.state && state.type == modalTypes.UPDATE_TODO_MODAL;
       },
+      set() {
+        this.closeModal();
+      },
     },
     todo: {
       get() {

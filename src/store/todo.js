@@ -59,7 +59,7 @@ export default {
     },
     getModalState(state) {
       return state.modalState;
-    },
+    }
   },
   actions: {
     /* TODO Methods */

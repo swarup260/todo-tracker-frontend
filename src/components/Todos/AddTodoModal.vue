@@ -28,6 +28,9 @@ export default {
         const state = this.state();
         return state.state && state.type == modalTypes.ADD_TODO_MODAL;
       },
+      set(){
+        this.closeModal();
+      }
     },
   },
   methods: {
