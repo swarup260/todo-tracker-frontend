@@ -6,7 +6,10 @@ import vuetify from "./plugins/vuetify";
 import axios from "axios";
 import { BASE_URL } from "./api/urls";
 import { getData } from "./utils/localStorage";
-import '@/store/subscribers';
+import "@/store/subscribers";
+/* Socket.io Setup */
+import SocketIO from "socket.io-client";
+import VueSocketIOExt from 'vue-socket.io-extended';
 
 /* Set Axios Default Setting */
 axios.defaults.baseURL = BASE_URL;
@@ -23,7 +26,7 @@ axios.interceptors.response.use(
       if (!getData("userLogin")) {
         router.push("/");
       }
-      store.dispatch("auth/login",getData('userLogin'));
+      store.dispatch("auth/login", getData("userLogin"));
       return axios(error.config);
     }
 
@@ -32,6 +35,9 @@ axios.interceptors.response.use(
 );
 
 Vue.config.productionTip = false;
+
+const socket = SocketIO(BASE_URL);
+Vue.use(VueSocketIOExt, socket, { store });
 
 new Vue({
   router,
