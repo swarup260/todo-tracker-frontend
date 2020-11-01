@@ -112,6 +112,7 @@ export default {
       });
     },
     closeForm(data) {
+      console.log(data);
       return true;
     },
   },
