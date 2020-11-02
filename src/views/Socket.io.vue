@@ -30,7 +30,9 @@
           <v-col cols="8">
             <v-row dense>
               <v-col cols="12">
-                <v-card outlined elevation="5" dark height="340"></v-card>
+                <v-card outlined elevation="5" dark height="340">
+                  {{  messageItem  }}
+                </v-card>
               </v-col>
               <v-col cols="12">
                 <v-card outlined elevation="5" dark height="100">
@@ -45,8 +47,8 @@
                       ></v-text-field>
                     </v-col>
                     <v-col cols="2">
-                      <v-btn class="ma-3" large>
-                        <v-icon > mdi-send </v-icon>
+                      <v-btn class="ma-3" large @click="sendMessage">
+                        <v-icon> mdi-send </v-icon>
                       </v-btn>
                     </v-col>
                   </v-row>
@@ -71,10 +73,25 @@ export default {
         { text: "Conversions", icon: "mdi-flag" },
       ],
       message: "",
+      messageItem : ""
     };
   },
   created() {
     console.log(this.$socket);
+  },
+  watch: {
+    messageItem(data) {
+      this.$socket.$subscribe("chat_message", (payload) => {
+        console.log(payload);
+      });
+      console.log(data);
+    },
+  },
+  methods: {
+    sendMessage() {
+      this.$socket.client.emit("chat_message", this.message);
+      this.message = "";
+    },
   },
 };
 </script>
