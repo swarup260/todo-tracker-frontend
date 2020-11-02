@@ -10,8 +10,8 @@
         </v-card-title>
       </v-card>
     </v-col>
-    <v-col class="fill-width fill-height">
-      <v-card outlined>
+    <v-col class="fill-width">
+      <v-card outlined elevation="5" height="480">
         <v-row>
           <v-col cols="4">
             <v-list dense>
@@ -28,9 +28,31 @@
             </v-list>
           </v-col>
           <v-col cols="8">
-            <v-card outlined>
-              
-            </v-card>
+            <v-row dense>
+              <v-col cols="12">
+                <v-card outlined elevation="5" dark height="340"></v-card>
+              </v-col>
+              <v-col cols="12">
+                <v-card outlined elevation="5" dark height="100">
+                  <v-row dense>
+                    <v-col cols="10">
+                      <v-text-field
+                        class="pa-2"
+                        v-model="message"
+                        label="Message"
+                        outlined
+                        clearable
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="2">
+                      <v-btn class="ma-3" large>
+                        <v-icon > mdi-send </v-icon>
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+                </v-card>
+              </v-col>
+            </v-row>
           </v-col>
         </v-row>
       </v-card>
@@ -48,6 +70,7 @@ export default {
         { text: "Audience", icon: "mdi-account" },
         { text: "Conversions", icon: "mdi-flag" },
       ],
+      message: "",
     };
   },
   created() {
