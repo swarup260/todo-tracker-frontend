@@ -7,6 +7,7 @@
           <span class="ml-1">{{
             $socket.connected ? "Connected" : "Disconnected"
           }}</span>
+          <span class="ml-1">{{ welcomeMessage }}</span>
         </v-card-title>
       </v-card>
     </v-col>
@@ -30,8 +31,12 @@
           <v-col cols="8">
             <v-row dense>
               <v-col cols="12">
-                <v-card outlined elevation="5" dark height="340">
-                  {{  messageItem  }}
+                <v-card outlined elevation="5" dark height="340" class="over-flow">
+                  <v-list-item v-for="(message, i) in messages" :key="i">
+                    <v-list-item-content>
+                      {{ message }}
+                    </v-list-item-content>
+                  </v-list-item>
                 </v-card>
               </v-col>
               <v-col cols="12">
@@ -44,6 +49,7 @@
                         label="Message"
                         outlined
                         clearable
+                        @keydown.enter="sendMessage"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="2">
@@ -63,6 +69,7 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
 export default {
   data() {
     return {
@@ -73,28 +80,38 @@ export default {
         { text: "Conversions", icon: "mdi-flag" },
       ],
       message: "",
-      messageItem : ""
+      welcomeMessage: "",
     };
   },
   created() {
-    console.log(this.$socket);
+    // console.log(this.$socket);
+    this.$socket.$subscribe("connected", (payload) => {
+      this.welcomeMessage = payload;
+    });
   },
-  watch: {
-    messageItem(data) {
-      this.$socket.$subscribe("chat_message", (payload) => {
-        console.log(payload);
-      });
-      console.log(data);
-    },
+  computed: {
+    ...mapGetters({
+      messages: "chat/getMessages",
+    }),
   },
   methods: {
+    ...mapActions({
+      send: "chat/socket_chatMessage",
+    }),
     sendMessage() {
       this.$socket.client.emit("chat_message", this.message);
+      // this.send(this.message);
       this.message = "";
     },
   },
 };
 </script>
 
-<style>
+<style scoped>
+.over-flow {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
 </style>

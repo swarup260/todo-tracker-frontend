@@ -3,6 +3,7 @@ import Vuex from "vuex";
 import auth from "./auth";
 import todo from "./todo";
 import projects from "./projects";
+import chat from "./chat";
 Vue.use(Vuex);
 
 const defaultState = {
@@ -34,5 +35,6 @@ export default new Vuex.Store({
     auth,
     todo,
     projects,
+    chat
   },
 });
