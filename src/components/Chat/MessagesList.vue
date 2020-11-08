@@ -3,17 +3,22 @@
     <li
       v-for="(message, index) in messages"
       :key="index"
-      class="chat-message align-right"
+      class="chat-message"
+      :class="[message.isSend ? 'align-right' : 'align-left' ]"
     >
-      {{ message }}
+      {{ message.message }}
+      <div class="time-format">{{ new Date(message.time).toLocaleTimeString()  }}</div>
     </li>
   </ul>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
-  props: {
-    messages: Array,
+  computed: {
+    ...mapGetters({
+      messages: "chat/getMessages",
+    })
   },
 };
 </script>
@@ -39,5 +44,10 @@ ul {
   text-align: left;
   float: left;
   clear: both;
+}
+.time-format{
+  display: flex;
+  font-size: 10px;
+  color: white;
 }
 </style>

@@ -16,9 +16,10 @@ export default {
     },
   },
   actions: {
-    // eslint-disable-next-line no-unused-vars
-    socket_chatMessage({ commit }, message) {
-      this._vm.$socket.boardcast.emit('chat_message', message);
+    sendMessage({
+      commit
+    }, data) {
+      commit('SOCKET_CHAT_MESSAGE',data);
     },
   },
 };

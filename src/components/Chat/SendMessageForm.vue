@@ -5,6 +5,8 @@
         <v-text-field
           outlined
           v-model="message"
+          :rules="inputRules"
+          @keydown.enter="submitHandler"
         ></v-text-field>
       </v-col>
       <v-col cols="2">
@@ -17,6 +19,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 import { rules } from "@/utils/validation-rule";
 export default {
   data() {
@@ -25,10 +28,14 @@ export default {
       message: "",
     };
   },
-  message: {
+  methods: {
+    ...mapActions({
+      send: "chat/sendMessage",
+    }),
     submitHandler() {
       if (this.$refs.sendMessage.validate()) {
-        console.log(this.message);
+        this.send({message : this.message , isSend : true , time : new Date()});
+        this.$socket.client.emit('chat_message', this.message);
         this.message = "";
       }
     },

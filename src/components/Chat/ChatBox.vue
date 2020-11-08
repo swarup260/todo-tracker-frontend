@@ -1,7 +1,7 @@
 <template>
   <v-card outlined elevation="2">
     <v-card-text class="chatbox">
-      <MessagesList :messages="messages" />
+      <MessagesList />
     </v-card-text>
     <v-card-subtitle>
       <v-divider></v-divider>
@@ -16,13 +16,8 @@ import SendMessageForm from "./SendMessageForm.vue";
 export default {
   components: {
     MessagesList,
-    SendMessageForm
-  },
-  data() {
-    return {
-      messages: ["hw r u ? ", "i'm fine"],
-    };
-  },
+    SendMessageForm,
+  }
 };
 </script>
 
