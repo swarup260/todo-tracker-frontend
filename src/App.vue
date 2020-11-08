@@ -4,10 +4,21 @@
       <h1>Todo !</h1>
       <v-spacer></v-spacer>
       <span v-if="user.username" class="flex-row d-flex">
-        <span>{{ user.username }}</span>
+        <span class="mr-1">{{ user.username }} </span>
+        <v-divider vertical></v-divider>
+        <span class="mr-1 ml-1">
+          {{ $socket.connected ? "You Are Online" : "You Are Offline" }}</span
+        >
+        <v-divider vertical></v-divider>
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
-            <span v-bind="attrs" v-on="on" class="material-icons ml-3 pointer" @click="logout">login</span>
+            <span
+              v-bind="attrs"
+              v-on="on"
+              class="material-icons ml-3 pointer"
+              @click="logout"
+              >login</span
+            >
           </template>
           <span>Logout</span>
         </v-tooltip>
@@ -25,7 +36,9 @@
       >
         {{ message.message }}
         <template v-slot:action="{ attrs }">
-          <v-btn color="white" text v-bind="attrs" @click="snackbar = false">Close</v-btn>
+          <v-btn color="white" text v-bind="attrs" @click="snackbar = false"
+            >Close</v-btn
+          >
         </template>
       </v-snackbar>
 
