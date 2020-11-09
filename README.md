@@ -23,6 +23,16 @@ npm run lint
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
+## List Of Packages Used 
+
+* [Vue](https://vuejs.org/)
+* [Vuetify](https://vuetifyjs.com/en/)
+* [Axios](https://github.com/axios/axios)
+* [Tiptap](https://tiptap.dev/)
+* [Socket.io](https://socket.io/)
+* [Vue-socket.io-extended](https://github.com/probil/vue-socket.io-extended)
+
+
 
 
 ## RoadMap 
