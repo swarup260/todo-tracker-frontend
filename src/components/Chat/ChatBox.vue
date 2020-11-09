@@ -4,6 +4,7 @@
       <MessagesList />
     </v-card-text>
     <v-card-subtitle>
+      <span v-if="userTyping.status">User Typing ...</span>
       <v-divider></v-divider>
       <SendMessageForm />
     </v-card-subtitle>
@@ -13,10 +14,16 @@
 <script>
 import MessagesList from "./MessagesList.vue";
 import SendMessageForm from "./SendMessageForm.vue";
+import { mapGetters } from "vuex";
 export default {
   components: {
     MessagesList,
     SendMessageForm,
+  },
+  computed : {
+    ...mapGetters({
+      userTyping : "chat/getIsUserTyping"
+    })
   }
 };
 </script>

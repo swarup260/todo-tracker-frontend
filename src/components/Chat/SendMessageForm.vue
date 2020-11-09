@@ -7,6 +7,8 @@
           v-model="message"
           :rules="inputRules"
           @keydown.enter="submitHandler"
+          @keydown="userTypingEvent"
+          @keyup="userTypingEventStop"
         ></v-text-field>
       </v-col>
       <v-col cols="2">
@@ -34,10 +36,24 @@ export default {
     }),
     submitHandler() {
       if (this.$refs.sendMessage.validate()) {
-        this.send({message : this.message , isSend : true , time : new Date()});
-        this.$socket.client.emit('chat_message', this.message);
+        this.send({ message: this.message, isSend: true, time: new Date() });
+        this.$socket.client.emit("chat_message", this.message);
         this.message = "";
       }
+    },
+    userTypingEvent(event) {
+      if (event.target.value.length > 0) {
+        this.$socket.client.emit("user_typing", {
+          user: "user typing",
+          status: true,
+        });
+      }
+    },
+    userTypingEventStop() {
+      this.$socket.client.emit("user_typing", {
+        user: "user typing",
+        status: false,
+      });
     },
   },
 };
