@@ -1,5 +1,8 @@
 <template>
-  <v-card outlined elevation="2">
+  <v-card flat elevation="2">
+    <v-card-title>
+        {{ boardCastMessage  }}
+    </v-card-title>
     <v-card-text class="chatbox">
       <MessagesList />
     </v-card-text>
@@ -22,8 +25,12 @@ export default {
   },
   computed : {
     ...mapGetters({
-      userTyping : "chat/getIsUserTyping"
+      userTyping : "chat/getIsUserTyping",
+      boardCastMessage : "chat/getBoardcastMessage"
     })
+  },
+  created(){
+    this.$socket.client.emit("room", "privated");
   }
 };
 </script>

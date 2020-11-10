@@ -1,6 +1,7 @@
 const defaultState = {
   messages: [],
-  userTyping : {}
+  userTyping: {},
+  boardcastMessage: ""
 };
 
 export default {
@@ -10,24 +11,30 @@ export default {
     SOCKET_CHAT_MESSAGE(state, message) {
       state.messages.push(message);
     },
-    SOCKET_USER_TYPING(state,object){
+    SOCKET_USER_TYPING(state, object) {
       state.userTyping = object
+    },
+    SOCKET_JOIN_ROOM(state, boardcastMessage) {
+      state.boardcastMessage = boardcastMessage
     }
   },
   getters: {
     getMessages(state) {
       return state.messages;
     },
-    getIsUserTyping(state){
-      console.log(state.userTyping);
+    getIsUserTyping(state) {
+      console.log(state);
       return state.userTyping;
+    },
+    getBoardcastMessage(state) {
+       return state.boardcastMessage
     }
   },
   actions: {
     sendMessage({
       commit
     }, data) {
-      commit('SOCKET_CHAT_MESSAGE',data);
+      commit('SOCKET_CHAT_MESSAGE', data);
     },
   },
 };

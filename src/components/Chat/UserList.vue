@@ -1,9 +1,18 @@
 <template>
   <v-list dense>
-    <v-list-item-group v-model="selectedItem" color="primary">
-      <v-list-item v-for="(item, i) in items" :key="i">
+    <v-list-item-group
+      v-model="selectedItem"
+      color="primary"
+      mandatory
+      tag="v-flex"
+    >
+      <v-list-item
+        v-for="(item, i) in items"
+        :key="i"
+        v-slot="{ active, toggle }"
+      >
         <v-list-item-icon>
-          <v-icon>mdi-account</v-icon>
+          <v-icon :input-value="active" @click="toggle">mdi-account</v-icon>
         </v-list-item-icon>
         <v-list-item-content>
           <v-list-item-title v-text="item"></v-list-item-title>
@@ -25,5 +34,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>
