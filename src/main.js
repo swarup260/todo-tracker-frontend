@@ -19,7 +19,7 @@ axios.interceptors.response.use(
   },
   function(error) {
     /* Regenerate Token if expired and user credentials */
-    if (error.response.status == 401) {
+    if (error.response && error.response.status == 401) {
       if (!getData("userLogin")) {
         router.push("/");
       }
@@ -27,7 +27,7 @@ axios.interceptors.response.use(
       return axios(error.config);
     }
 
-    return Promise.reject(error);
+    return Promise.reject(new Error(error.message));
   }
 );
 

@@ -3,7 +3,6 @@ import Vuex from "vuex";
 import auth from "./auth";
 import todo from "./todo";
 import projects from "./projects";
-import chat from "./chat";
 Vue.use(Vuex);
 
 const defaultState = {
@@ -21,20 +20,30 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    setMessage({ commit }, message) {
+    setMessage({
+      commit
+    }, message) {
       commit("SET_MESSAGE", message);
     },
-    resetGlobalState({ commit, dispatch }) {
+    resetGlobalState({
+      commit,
+      dispatch
+    }) {
       commit("RESET_STATE");
-      dispatch("auth/resetAuthState", null, { root: true });
-      dispatch("todo/resetTodoState", null, { root: true });
-      dispatch("projects/resetProjects", null, { root: true });
+      dispatch("auth/resetAuthState", null, {
+        root: true
+      });
+      dispatch("todo/resetTodoState", null, {
+        root: true
+      });
+      dispatch("projects/resetProjects", null, {
+        root: true
+      });
     },
   },
   modules: {
     auth,
     todo,
-    projects,
-    chat
+    projects
   },
 });

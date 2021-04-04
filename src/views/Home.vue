@@ -26,13 +26,17 @@
               <v-icon>mdi-open-in-new</v-icon>
             </v-btn>
             <v-col>
-              <v-btn color="error"  @click="reset">Reset</v-btn>
-              <v-btn color="success" class="ml-3"  type="submit">Submit</v-btn>
+              <v-btn color="error" @click="reset">Reset</v-btn>
+              <v-btn color="success" class="ml-3" type="submit">Submit</v-btn>
             </v-col>
           </v-card>
         </v-form>
       </v-col>
     </v-row>
+    <!-- Show Overlay Loader -->
+    <v-overlay :value="isLoading">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
   </v-container>
 </template>
 <script>
@@ -41,7 +45,7 @@ snackbar show to state change
 https://dev.to/viniciuskneves/watch-for-vuex-state-changes-2mgj
 */
 import { rules } from "../utils/validation-rule";
-import { mapActions }  from 'vuex'
+import { mapActions,mapGetters } from "vuex";
 export default {
   name: "SignUp",
   data() {
@@ -53,19 +57,32 @@ export default {
       showPassword: false,
       emailRules: rules.emailRules,
       inputRules: rules.inputRules,
+      overlay: false,
     };
   },
+  computed :{
+    isLoading : {
+      get(){
+        return this.loadingState();
+      }
+    }
+  },
   methods: {
+    ...mapGetters({
+      loadingState: "auth/getLoadingState",
+    }),
     ...mapActions({
-      login : 'auth/login'
+      login: "auth/login",
+      setLoadingState : "auth/setLoadingState"
     }),
     async submitHandler() {
       if (this.$refs.loginForm.validate()) {
-         let result = await this.login({ ...this.userInput });
-         if (result) {
-            this.$router.push('Dashboard');
-         }
-
+        this.setLoadingState(true);
+        let result = await this.login({ ...this.userInput });
+        if (result) {
+          this.setLoadingState(false);
+          this.$router.push("Dashboard");
+        }
       }
     },
     reset() {

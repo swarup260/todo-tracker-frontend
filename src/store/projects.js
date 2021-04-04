@@ -96,15 +96,9 @@ export default {
           commit("SET_PROJECTS", data.data);
         }
       } catch (error) {
-        let message;
-        if (error.response) {
-          message = error.response.data.message;
-        } else {
-          message = error.toString();
-        }
         commit(
           "SET_MESSAGE", {
-            message: message,
+            message: error.message,
             type: "error",
           }, {
             root: true,
@@ -139,15 +133,9 @@ export default {
           return true;
         }
       } catch (error) {
-        let message;
-        if (error.response) {
-          message = error.response.data.message;
-        } else {
-          message = error.toString();
-        }
         commit(
           "SET_MESSAGE", {
-            message: message,
+            message: error.message,
             type: "error",
           }, {
             root: true,
@@ -170,15 +158,9 @@ export default {
           commit("SET_PROJECT", data.data);
         }
       } catch (error) {
-        let message;
-        if (error.response) {
-          message = error.response.data.message;
-        } else {
-          message = error.toString();
-        }
         commit(
           "SET_MESSAGE", {
-            message: message,
+            message: error.message,
             type: "error",
           }, {
             root: true,
@@ -217,15 +199,9 @@ export default {
           return true;
         }
       } catch (error) {
-        let message;
-        if (error.response) {
-          message = error.response.data.message;
-        } else {
-          message = error.toString();
-        }
         commit(
           "SET_MESSAGE", {
-            message: message,
+            message: error.message,
             type: "error",
           }, {
             root: true,
@@ -268,15 +244,9 @@ export default {
           return true;
         }
       } catch (error) {
-        let message;
-        if (error.response) {
-          message = error.response.data.message;
-        } else {
-          message = error.toString();
-        }
         commit(
           "SET_MESSAGE", {
-            message: message,
+            message: error.message,
             type: "error",
           }, {
             root: true,
@@ -320,15 +290,9 @@ export default {
           return true;
         }
       } catch (error) {
-        let message;
-        if (error.response) {
-          message = error.response.data.message;
-        } else {
-          message = error.toString();
-        }
         commit(
           "SET_MESSAGE", {
-            message: message,
+            message: error.message,
             type: "error",
           }, {
             root: true,
@@ -370,15 +334,9 @@ export default {
           return true;
         }
       } catch (error) {
-        let message;
-        if (error.response) {
-          message = error.response.data.message;
-        } else {
-          message = error.toString();
-        }
         commit(
           "SET_MESSAGE", {
-            message: message,
+            message: error.message,
             type: "error",
           }, {
             root: true,
@@ -416,15 +374,9 @@ export default {
           return true;
         }
       } catch (error) {
-        let message;
-        if (error.response) {
-          message = error.response.data.message;
-        } else {
-          message = error.toString();
-        }
         commit(
           "SET_MESSAGE", {
-            message: message,
+            message: error.message,
             type: "error",
           }, {
             root: true,
@@ -469,15 +421,9 @@ export default {
           return true;
         }
       } catch (error) {
-        let message;
-        if (error.response) {
-          message = error.response.data.message;
-        } else {
-          message = error.toString();
-        }
         commit(
           "SET_MESSAGE", {
-            message: message,
+            message: error.message,
             type: "error",
           }, {
             root: true,

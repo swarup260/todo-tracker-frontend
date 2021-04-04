@@ -1,6 +1,5 @@
 <template>
   <v-container>
-    <SearchTodo />
     <SkeletonTodoLoder v-if="isLoading" />
     <AddBtnTodo />
     <TodoList />
@@ -11,7 +10,6 @@
 import SkeletonTodoLoder from "@/components/Todos/SkeletonTodoLoder";
 import AddBtnTodo from "@/components/Todos/AddBtnTodo";
 import TodoList from "@/components/Todos/TodoList";
-import SearchTodo from "@/components/Todos/SearchTodo";
 import { modalTypes } from "@/api/types.js";
 import { mapActions, mapGetters } from "vuex";
 export default {
@@ -19,8 +17,7 @@ export default {
   components: {
     SkeletonTodoLoder,
     AddBtnTodo,
-    TodoList,
-    SearchTodo
+    TodoList
   },
   computed: {
     isLoading: {

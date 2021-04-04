@@ -6,9 +6,9 @@
       <span v-if="user.username" class="flex-row d-flex">
         <span class="mr-1">{{ user.username }} </span>
         <v-divider vertical></v-divider>
-        <span class="mr-1 ml-1">
-          {{ $socket.connected ? "You Are Online" : "You Are Offline" }}</span
-        >
+        <!-- <span class="mr-1 ml-1">
+          {{ $socket.connected ? "You Are Online" : "You Are Offline" }}
+          </span> -->
         <v-divider vertical></v-divider>
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
@@ -42,6 +42,24 @@
         </template>
       </v-snackbar>
 
+      <!-- NetWork Error Dailog -->
+
+      <v-dialog v-model="dialog" width="500">
+        <v-card>
+          <v-card-title class="headline"> Network Error </v-card-title>
+
+          <v-card-text class="headline"> Server Down Please Try Again Later !! </v-card-text>
+
+          <v-divider></v-divider>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="green darken-1"
+            text @click="dialog = false"> Close </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
       <router-view />
     </v-main>
   </v-app>
@@ -54,9 +72,14 @@ export default {
   data: () => ({
     snackbar: false,
     snackbarColor: "error",
+    dialog: false,
   }),
   watch: {
     message(newValue) {
+      if (newValue.message == "Network Error") {
+          this.dialog = true;
+          return;
+      }
       if (newValue) {
         this.snackbarColor = newValue.type;
         this.snackbar = true;
