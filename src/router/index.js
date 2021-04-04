@@ -51,11 +51,6 @@ const routes = [
     component: () => import("../views/TodoDrag.vue"),
   },
   {
-    path: "/socket",
-    name: "Socket",
-    component: () => import("../views/Socket.io.vue"),
-  },
-  {
     // will match everything
     path: "*",
     component: () => import("../views/404.vue"),
