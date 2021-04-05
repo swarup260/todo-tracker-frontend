@@ -1,14 +1,14 @@
 <template>
   <v-form ref="udpateForm" @submit.prevent="updateTodo">
     <v-text-field
-      v-model="formData.taskName"
+      :value="formData.taskName"
       :rules="inputRules"
       label="Task Name"
       outlined
       lazy
     ></v-text-field>
     <v-textarea
-      v-model="formData.description"
+      :value="formData.description"
       label="Description"
       outlined
       lazy

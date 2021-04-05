@@ -17,7 +17,7 @@
           outlined
           height="5"
         ></v-textarea>
-        <v-btn color="success" block type="submit">Create Project</v-btn>
+        <v-btn color="success" block type="submit" :loading="isLoading">Create Project</v-btn>
       </v-form>
     </v-card-text>
   </v-card>
@@ -34,6 +34,7 @@ export default {
         name: "",
         description: "",
       },
+      isLoading : false
     };
   },
   methods: {
@@ -42,8 +43,10 @@ export default {
     }),
     async submitHandler() {
       if (this.$refs.addNewProject.validate()) {
+        this.isLoading = true;
         const result = await this.addProject({ ...this.inputUser });
         if (result) {
+          this.isLoading = false;
           this.inputUser = {
             name: "",
             description: "",

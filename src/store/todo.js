@@ -63,7 +63,7 @@ export default {
   },
   actions: {
     /* TODO Methods */
-    async fetchTodo({ dispatch, getters, commit }) {
+    async fetchTodo({ getters, commit }) {
       try {
         const todos = getters.getTodos;
         if (todos && todos.constructor.name == "Array" && todos.length > 0) {
@@ -75,45 +75,43 @@ export default {
           return true;
         }
       } catch (error) {
-        dispatch(
-          "setMessage",
-          {
-            message: error.toString(),
+        commit(
+          "SET_MESSAGE", {
+            message: error.message,
             type: "error",
-          },
-          { root: true }
+          }, {
+            root: true,
+          }
         );
-        return false;
       }
     },
-    async addTodo({ dispatch, commit }, task) {
+    async addTodo({ commit }, task) {
       try {
         let { status, data } = await axios.post(endpoints.todos.todos, task);
         if (status == 200) {
           commit("ADD_TODO", data.data);
-          dispatch(
-            "setMessage",
-            {
+          commit(
+            "SET_MESSAGE", {
               message: data.message,
               type: "success",
-            },
-            { root: true }
+            }, {
+              root: true,
+            }
           );
           return true;
         }
       } catch (error) {
-        dispatch(
-          "setMessage",
-          {
-            message: error.toString(),
+        commit(
+          "SET_MESSAGE", {
+            message: error.message,
             type: "error",
-          },
-          { root: true }
+          }, {
+            root: true,
+          }
         );
-        return false;
       }
     },
-    async deleteTodo({ dispatch, commit }, id) {
+    async deleteTodo({ commit }, id) {
       try {
         const { status, data } = await axios.delete(
           `${endpoints.todos.todos}/${id}`
@@ -125,30 +123,28 @@ export default {
           commit("SET_TODOS", filterTodos);
 
           /* set the messages */
-          dispatch(
-            "setMessage",
-            {
+          commit(
+            "SET_MESSAGE", {
               message: data.message,
               type: "success",
-            },
-            { root: true }
-          );
+            }, {
+              root: true,
+            });
 
           return true;
         }
       } catch (error) {
-        dispatch(
-          "setMessage",
-          {
-            message: error.toString,
+        commit(
+          "SET_MESSAGE", {
+            message: error.message,
             type: "error",
-          },
-          { root: true }
+          }, {
+            root: true,
+          }
         );
-        return false;
       }
     },
-    async updateTodo({ dispatch, commit }, updateData) {
+    async updateTodo({ commit }, updateData) {
       try {
         const { status, data } = await axios.patch(
           endpoints.todos.todos,
@@ -166,26 +162,25 @@ export default {
           commit("SET_TODOS", todos);
 
           /* set the messages */
-          dispatch(
-            "setMessage",
-            {
+          commit(
+            "SET_MESSAGE", {
               message: data.message,
               type: "success",
-            },
-            { root: true }
+            }, {
+              root: true,
+            }
           );
           return true;
         }
       } catch (error) {
-        dispatch(
-          "setMessage",
-          {
-            message: error.toString(),
+        commit(
+          "SET_MESSAGE", {
+            message: error.message,
             type: "error",
-          },
-          { root: true }
+          }, {
+            root: true,
+          }
         );
-        return false;
       }
     },
     async processTodo({ commit }, todo) {

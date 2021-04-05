@@ -5,6 +5,7 @@
         <AddProject />
       </v-col>
     </v-row>
+    <SkeletonTodoLoder v-if="isLoading" />
     <span v-if="projects.length > 0" class="mt-10">
       <h3 class="pa-3">Projects</h3>
       <v-divider></v-divider>
@@ -24,6 +25,7 @@
 </template>
 
 <script>
+import SkeletonTodoLoder from "@/components/Todos/SkeletonTodoLoder";
 import ProjectCard from "@/components/Projects/ProjectCard";
 import AddProject from "@/components/Projects/AddProject";
 import { mapGetters, mapActions } from "vuex";
@@ -31,9 +33,11 @@ export default {
   components: {
     ProjectCard,
     AddProject,
+    SkeletonTodoLoder
   },
   data() {
-    return {};
+    return {
+    };
   },
   methods: {
     ...mapActions({
@@ -43,6 +47,7 @@ export default {
   computed: {
     ...mapGetters({
       projects: "projects/getProjects",
+      isLoading : "projects/getLoadingState"
     }),
   },
   async created() {
