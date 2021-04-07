@@ -22,7 +22,7 @@
               v-on="on"
               :class="{ 'show-action-btn': hover }"
               @click="deleteTodo(todo._id)"
-              :loading="isLoadingDelete"
+              :loading="isDeleteLoading"
             >
               <span class="material-icons"> delete </span>
             </v-btn>
@@ -59,16 +59,14 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
-import { modalTypes } from "@/api/types.js";
+import { mapActions,mapGetters } from "vuex";
+import { modalTypes,loadingStateTypes } from "@/api/types.js";
 export default {
   props: {
     todo: Object,
   },
   data() {
     return {
-      isLoading: false,
-      isLoadingDelete: false,
     };
   },
   computed: {
@@ -77,8 +75,27 @@ export default {
         return this.getDeadlineFormat(this.$props.todo.deadline);
       },
     },
+    isLoading: {
+      get() {
+        return (
+          this.loadingState().state &&
+          this.loadingState().type == loadingStateTypes.UPDATE_TODO
+        );
+      },
+    },
+    isDeleteLoading : {
+      get(){
+        return (
+          this.loadingState().state &&
+          this.loadingState().type == loadingStateTypes.DELETE_TODO
+        );
+      }
+    }
   },
   methods: {
+    ...mapGetters({
+      loadingState: "todo/getLoadingState",
+    }),
     ...mapActions({
       delete: "todo/deleteTodo",
       update: "todo/updateTodo",
@@ -104,24 +121,17 @@ export default {
         class: "font-weight-black",
       };
     },
+    
     async updateStatus(id) {
-      this.isLoading = true;
-      const result = await this.update({
+      await this.update({
         id: id,
         update: {
           status: true,
         },
       });
-      if (result) {
-        this.isLoading = false;
-      }
     },
     async deleteTodo(id) {
-      this.isLoadingDelete = true;
-      const result = await this.delete(id);
-      if (result) {
-        this.isLoadingDelete = false;
-      }
+      await this.delete(id);
     },
     openModal(data) {
       this.setState({

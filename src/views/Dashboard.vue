@@ -10,7 +10,7 @@
 import SkeletonTodoLoder from "@/components/Todos/SkeletonTodoLoder";
 import AddBtnTodo from "@/components/Todos/AddBtnTodo";
 import TodoList from "@/components/Todos/TodoList";
-import { modalTypes } from "@/api/types.js";
+import { loadingStateTypes } from "@/api/types.js";
 import { mapActions, mapGetters } from "vuex";
 export default {
   name: "Dashboard",
@@ -24,7 +24,7 @@ export default {
       get() {
         return (
           this.loadingState().state &&
-          this.loadingState().type == modalTypes.FETCH_TODOS_LOADING
+          this.loadingState().type == loadingStateTypes.FETCH_TODO
         );
       },
     },
@@ -34,16 +34,12 @@ export default {
       loadingState: "todo/getLoadingState",
     }),
     ...mapActions({
-      fetch: "todo/fetchTodo",
+      fetchTodo: "todo/fetchTodo",
       setLoadingState: "todo/setLoadingState",
     }),
   },
   async created() {
-    this.setLoadingState({ state: true, type: modalTypes.FETCH_TODOS_LOADING });
-    const result = await this.fetch();
-    if (result) {
-      this.setLoadingState({ state: false, type: "" });
-    }
+    await this.fetchTodo();
   },
 };
 </script>

@@ -7,3 +7,10 @@ module.exports.modalTypes = {
   ADD_TODO_MODAL : "add_todo_modal",
   UPDATE_TODO_MODAL : "update_todo_modal"
 };
+
+module.exports.loadingStateTypes = {
+  ADD_TODO : "add_todo",
+  DELETE_TODO : "delete_todo",
+  UPDATE_TODO : "update_todo",
+  FETCH_TODO : "fetch_todo"
+}

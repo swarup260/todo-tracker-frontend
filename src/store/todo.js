@@ -1,7 +1,16 @@
 import axios from "axios";
-import { endpoints } from "../api/urls";
+import {
+  endpoints
+} from "../api/urls";
 
-import { storeData, getData } from "../utils/localStorage";
+import {
+  storeData,
+  getData
+} from "../utils/localStorage";
+
+import {
+  loadingStateTypes
+} from '../api/types';
 
 const defaultState = {
   todos: [],
@@ -63,18 +72,47 @@ export default {
   },
   actions: {
     /* TODO Methods */
-    async fetchTodo({ getters, commit }) {
+    async fetchTodo({
+      getters,
+      commit
+    }) {
       try {
+
+        console.log("fetch...");
+        commit("SET_LOADING_STATE", {
+          type: loadingStateTypes.FETCH_TODO,
+          state: true
+        });
+
         const todos = getters.getTodos;
         if (todos && todos.constructor.name == "Array" && todos.length > 0) {
+          commit("SET_LOADING_STATE", {
+            type: "",
+            state: false
+          });
           return todos;
         }
-        const { status, data } = await axios.get(endpoints.todos.todos);
+        const {
+          status,
+          data
+        } = await axios.get(endpoints.todos.todos);
         if (status == 200) {
           commit("SET_TODOS", data.data);
+
+          commit("SET_LOADING_STATE", {
+            type: "",
+            state: false
+          });
+
           return true;
         }
       } catch (error) {
+
+        commit("SET_LOADING_STATE", {
+          type: "",
+          state: false
+        });
+
         commit(
           "SET_MESSAGE", {
             message: error.message,
@@ -85,9 +123,20 @@ export default {
         );
       }
     },
-    async addTodo({ commit }, task) {
+    async addTodo({
+      commit
+    }, task) {
       try {
-        let { status, data } = await axios.post(endpoints.todos.todos, task);
+        console.log(loadingStateTypes.ADD_TODO);
+        commit("SET_LOADING_STATE", {
+          type: loadingStateTypes.ADD_TODO,
+          state: true
+        });
+
+        let {
+          status,
+          data
+        } = await axios.post(endpoints.todos.todos, task);
         if (status == 200) {
           commit("ADD_TODO", data.data);
           commit(
@@ -98,9 +147,21 @@ export default {
               root: true,
             }
           );
+
+          commit("SET_LOADING_STATE", {
+            type: "",
+            state: false
+          });
+
           return true;
         }
       } catch (error) {
+
+        commit("SET_LOADING_STATE", {
+            type: "",
+            state: false
+          });
+
         commit(
           "SET_MESSAGE", {
             message: error.message,
@@ -111,9 +172,18 @@ export default {
         );
       }
     },
-    async deleteTodo({ commit }, id) {
+    async deleteTodo({
+      commit
+    }, id) {
       try {
-        const { status, data } = await axios.delete(
+        commit("SET_LOADING_STATE", {
+          type: loadingStateTypes.DELETE_TODO,
+          state: true
+        });
+        const {
+          status,
+          data
+        } = await axios.delete(
           `${endpoints.todos.todos}/${id}`
         );
         if (status == 200) {
@@ -131,9 +201,17 @@ export default {
               root: true,
             });
 
+            commit("SET_LOADING_STATE", {
+              type: "",
+              state: false
+            });
           return true;
         }
       } catch (error) {
+        commit("SET_LOADING_STATE", {
+          type: "",
+          state: false
+        });
         commit(
           "SET_MESSAGE", {
             message: error.message,
@@ -144,9 +222,18 @@ export default {
         );
       }
     },
-    async updateTodo({ commit }, updateData) {
+    async updateTodo({
+      commit
+    }, updateData) {
       try {
-        const { status, data } = await axios.patch(
+        commit("SET_LOADING_STATE", {
+          type: loadingStateTypes.UPDATE_TODO,
+          state: true
+        });
+        const {
+          status,
+          data
+        } = await axios.patch(
           endpoints.todos.todos,
           updateData
         );
@@ -170,9 +257,17 @@ export default {
               root: true,
             }
           );
+          commit("SET_LOADING_STATE", {
+            type: "",
+            state: false
+          });
           return true;
         }
       } catch (error) {
+        commit("SET_LOADING_STATE", {
+          type: "",
+          state: false
+        });
         commit(
           "SET_MESSAGE", {
             message: error.message,
@@ -183,21 +278,26 @@ export default {
         );
       }
     },
-    async processTodo({ commit }, todo) {
+    async processTodo({
+      commit
+    }, todo) {
       commit("ADD_TODO", todo);
       //   storeData('todos',todo);
     },
     /* Helpers */
-    resetTodoState({ commit }) {
+    resetTodoState({
+      commit
+    }) {
       commit("RESET_STATE");
     },
-    updateTodoState({ commit }, todos) {
+    updateTodoState({
+      commit
+    }, todos) {
       commit("SET_TODOS", todos);
     },
-    setLoadingState({ commit }, state) {
-      commit("SET_LOADING_STATE", state);
-    },
-    setModalState({ commit }, object) {
+    setModalState({
+      commit
+    }, object) {
       commit("SET_MODAL_STATE", object);
     },
   },

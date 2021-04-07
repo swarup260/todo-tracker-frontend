@@ -70,7 +70,8 @@
 
 <script>
 import { rules } from "@/utils/validation-rule";
-import { mapActions } from "vuex";
+import { loadingStateTypes } from "@/api/types.js";
+import { mapActions, mapGetters } from "vuex";
 const defaultInputUser = {
   taskName: "",
   status: false,
@@ -81,13 +82,25 @@ export default {
   components: {},
   data() {
     return {
-      isLoading: false,
       modal: false,
       inputRules: rules.inputRules,
       inputUser: defaultInputUser,
     };
   },
+  computed: {
+    isLoading: {
+      get() {
+        return (
+          this.loadingState().state &&
+          this.loadingState().type == loadingStateTypes.ADD_TODO
+        );
+      },
+    },
+  },
   methods: {
+    ...mapGetters({
+      loadingState: "todo/getLoadingState",
+    }),
     ...mapActions({
       add: "todo/addTodo",
       setState: "todo/setModalState",
@@ -95,13 +108,11 @@ export default {
     async submitTodo() {
       if (this.$refs.addToDoForm.validate()) {
         console.log({ ...this.inputUser });
-        this.isLoading = true;
         let result = await this.add({
           ...this.inputUser,
         });
         if (result) {
           this.inputUser = defaultInputUser;
-          this.isLoading = false;
           this.setState({ state: false, type: "", data: {} });
         }
       }

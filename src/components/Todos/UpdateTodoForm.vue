@@ -70,7 +70,8 @@
 
 <script>
 import { rules } from "@/utils/validation-rule";
-import { mapActions } from "vuex";
+import { mapActions,mapGetters } from "vuex";
+import { loadingStateTypes } from "@/api/types.js";
 export default {
   props: {
     todo: Object,
@@ -78,8 +79,7 @@ export default {
   data() {
     return {
       datePickerModal: false,
-      inputRules: rules.inputRules,
-      isLoading: false,
+      inputRules: rules.inputRules
     };
   },
   computed: {
@@ -96,14 +96,24 @@ export default {
         this.$props.todo.deadline = newValue;
       },
     },
+    isLoading: {
+      get() {
+        return (
+          this.loadingState().state &&
+          this.loadingState().type == loadingStateTypes.UPDATE_TODO
+        );
+      },
+    },
   },
   methods: {
+    ...mapGetters({
+      loadingState: "todo/getLoadingState",
+    }),
     ...mapActions({
       update: "todo/updateTodo",
       setState: "todo/setModalState",
     }),
     async updateTodo() {
-      this.isLoading = true;
       const result = await this.update({
         id: this.$props.todo._id,
         update: {
@@ -114,7 +124,6 @@ export default {
         },
       });
       if (result) {
-        this.isLoading = false;
         this.setState({ state: false, type: "", data: {} });
       }
     },
