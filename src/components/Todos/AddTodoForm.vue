@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-form ref="addToDoForm" @submit.prevent="submitTodo">
+    <v-form ref="addToDoForm" @submit.prevent="addTodo">
       <v-row class="mb-6" justify="center" no-gutters>
         <v-text-field
           v-model="inputUser.taskName"
@@ -84,7 +84,7 @@ export default {
     return {
       modal: false,
       inputRules: rules.inputRules,
-      inputUser: defaultInputUser,
+      inputUser: {...defaultInputUser},
     };
   },
   computed: {
@@ -105,9 +105,8 @@ export default {
       add: "todo/addTodo",
       setState: "todo/setModalState",
     }),
-    async submitTodo() {
+    async addTodo() {
       if (this.$refs.addToDoForm.validate()) {
-        console.log({ ...this.inputUser });
         let result = await this.add({
           ...this.inputUser,
         });
