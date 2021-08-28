@@ -1,7 +1,20 @@
 <template>
   <v-app>
     <v-app-bar app color="dark" dark>
-      <h1>Todo !</h1>
+      <v-app-bar-title >
+        <v-icon
+      large
+      color="green darken-2"
+    >
+      mdi-card-bulleted
+    </v-icon>
+      </v-app-bar-title>
+      <h3 class="ml-10">
+        <router-link class="font-italic white--text" to="/dashboard">Todo</router-link>
+      </h3>
+      <h3 class="ml-3">
+        <router-link class="font-italic white--text" to="/projects">Projects</router-link>
+      </h3>
       <v-spacer></v-spacer>
       <span v-if="user.username" class="flex-row d-flex">
         <span class="mr-1">{{ user.username }} </span>
@@ -115,5 +128,8 @@ export default {
 <style lang="css" scoped>
 .pointer {
   cursor: pointer;
+}
+a{
+  text-decoration: none !important;
 }
 </style>
