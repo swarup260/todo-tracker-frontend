@@ -26,8 +26,8 @@
               <v-icon>mdi-open-in-new</v-icon>
             </v-btn>
             <v-col>
-              <v-btn color="error" @click="reset">Reset</v-btn>
-              <v-btn color="success" class="ml-3" type="submit">Submit</v-btn>
+              <v-btn color="success" type="submit">Login</v-btn>
+              <v-btn color="error" class="ml-3" @click="reset">Reset</v-btn>
             </v-col>
           </v-card>
         </v-form>
