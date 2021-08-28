@@ -1,6 +1,6 @@
 <template>
   <v-text-field
-    @keydown.enter="searchTodo"
+    @keyup="searchTodo"
     v-model="searchTerm"
     label="Search Todo"
     outlined
@@ -29,7 +29,7 @@ export default {
         todo.taskName.match(regex)
       );
       console.log(filterTodos);
-      this.searchTerm = "";
+      // this.searchTerm = "";
     },
   },
 };

@@ -23,7 +23,9 @@
         ></v-switch>
       </v-col>
       <v-col lg="6">
+        <!-- Conditional Rendering -->
         <v-dialog
+          v-if="!formData.status"
           ref="updatedialog"
           v-model="datePickerModal"
           :return-value.sync="deadline"
@@ -53,6 +55,15 @@
             >
           </v-date-picker>
         </v-dialog>
+        <v-text-field
+              v-model="deadline"
+              label="Set A Deadline"
+              prepend-icon="event"
+              readonly
+              disabled
+              v-if="formData.status"
+        ></v-text-field>
+        <!-- Conditional Rendering -->
       </v-col>
     </v-row>
     <v-row class="mb-6" justify="center" no-gutters>

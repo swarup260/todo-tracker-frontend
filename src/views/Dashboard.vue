@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <SearchTodo />
     <SkeletonTodoLoder v-if="isLoading" />
     <AddBtnTodo />
     <TodoList />
@@ -8,6 +9,7 @@
 
 <script>
 import SkeletonTodoLoder from "@/components/Todos/SkeletonTodoLoder";
+import SearchTodo from "@/components/Todos/SearchTodo";
 import AddBtnTodo from "@/components/Todos/AddBtnTodo";
 import TodoList from "@/components/Todos/TodoList";
 import { loadingStateTypes } from "@/api/types.js";
@@ -15,6 +17,7 @@ import { mapActions, mapGetters } from "vuex";
 export default {
   name: "Dashboard",
   components: {
+    SearchTodo,
     SkeletonTodoLoder,
     AddBtnTodo,
     TodoList
