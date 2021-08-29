@@ -1,9 +1,9 @@
 <template>
   <v-container>
     <SearchTodo />
+    <TodoList />
     <SkeletonTodoLoder v-if="isLoading" />
     <AddBtnTodo />
-    <TodoList />
   </v-container>
 </template>
 

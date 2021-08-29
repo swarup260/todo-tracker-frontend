@@ -14,6 +14,7 @@ import {
 
 const defaultState = {
   todos: [],
+  filterTodos : [],
   isLoading: {
     state: false,
     type: "",
@@ -36,6 +37,9 @@ export default {
     SET_TODOS(state, todos) {
       state.todos = todos;
       storeData("Todos", todos);
+    },
+    SET_FILTER_TODOS(state, todos) {
+      state.filterTodos = todos;
     },
     SET_MODAL_STATE(state, modalStateObj) {
       state.modalState = modalStateObj;
@@ -62,6 +66,9 @@ export default {
         state.todos = getData("Todos");
       }
       return state.todos;
+    },
+    getFilterTodos(state) {
+      return state.filterTodos ?? [];
     },
     getLoadingState(state) {
       return state.isLoading;

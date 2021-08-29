@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters,mapMutations } from "vuex";
 export default {
   data() {
     return {
@@ -20,16 +20,19 @@ export default {
     ...mapGetters({
       todos: "todo/getTodos",
     }),
+    ...mapMutations({
+      setFilteredTodos: "todo/SET_FILTER_TODOS"
+    }),
     searchTodo() {
       if (this.searchTerm == "") {
+        this.setFilteredTodos([]);
         return false;
       }
       const regex = new RegExp(this.searchTerm, "i");
       const filterTodos = this.todos().filter((todo) =>
         todo.taskName.match(regex)
       );
-      console.log(filterTodos);
-      // this.searchTerm = "";
+      this.setFilteredTodos(filterTodos);
     },
   },
 };

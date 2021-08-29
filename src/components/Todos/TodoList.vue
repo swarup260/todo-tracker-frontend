@@ -42,17 +42,20 @@ export default {
   methods: {
     ...mapGetters({
       todos: "todo/getTodos",
+      filterTodos : "todo/getFilterTodos"
     }),
   },
   computed: {
     completeTodos: {
       get() {
-        return this.todos().filter((item) => item.status);
+        const todos = this.filterTodos().length == 0 ? this.todos() : this.filterTodos()
+        return todos.filter((item) => item.status);
       },
     },
     inCompleteTodos: {
       get() {
-        return this.todos().filter((item) => !item.status);
+        const todos = this.filterTodos().length == 0 ? this.todos() : this.filterTodos()
+        return todos.filter((item) => !item.status);
       },
     },
   },
