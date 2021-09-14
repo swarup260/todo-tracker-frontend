@@ -1,8 +1,5 @@
 <template>
   <v-container>
-    <div>
-      <!-- {{ project }} -->
-    </div>
     <draggable
       :list="project.columns"
       class="row scroll"
@@ -56,21 +53,18 @@ export default {
       update: "projects/updateColumn",
       updateproject: "projects/updateProjectState",
     }),
-    async updateColumnIndex(event) {
-      const { oldIndex, newIndex } = event.moved;
+    async updateColumnIndex() {
       const columns = this.$props.project.columns;
-      const columnOldIndex = {
-        columnId: columns[oldIndex]._id,
-        update: { position: oldIndex },
-      };
-      const columnNexIndex = {
-        columnId: columns[newIndex]._id,
-        update: { position: newIndex },
-      };
+      const colsupdate = columns.map( (column,index ) => {
+       return {
+          columnId: column._id,
+          update: { position: index },
+       }
+      });
       let result = await this.update({
         updateData: {
           projectId: this.$props.project._id,
-          cols: [columnOldIndex, columnNexIndex],
+          cols: colsupdate,
         },
         multi: true,
       });

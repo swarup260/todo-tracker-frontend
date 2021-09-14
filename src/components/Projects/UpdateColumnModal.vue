@@ -84,6 +84,7 @@ export default {
           columnId: this.modalState.data._id,
           update: {
             name: this.modalState.data.name,
+            color: this.modalState.data.color
           },
         },
         multi: false,

@@ -20,6 +20,7 @@ export default {
   props: {
     columnId: String,
     projectId: String,
+    notes: Array
   },
   data() {
     return {
@@ -32,11 +33,12 @@ export default {
       add: "projects/addNote",
     }),
     async submitHandler() {
+      console.log(this.$props.notes.length++);
       const result = await this.add({
         projectId: this.$props.projectId,
         update: {
           name: this.noteName,
-          position: 1,
+          position: this.$props.notes.length++,
           columnRef: this.$props.columnId,
         },
       });
