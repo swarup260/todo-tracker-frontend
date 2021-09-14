@@ -17,7 +17,7 @@ export default {
     };
   },
   methods: {
-    ...mapGetters({
+    ...mapGetters({ 
       todos: "todo/getTodos",
     }),
     ...mapMutations({
