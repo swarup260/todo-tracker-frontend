@@ -6,28 +6,20 @@
         :class="{ 'on-hover': hover }"
         :elevation="hover ? 4 : 1"
         class="pointer"
+        @click="openModal"
       >
         <v-card-title>
           {{ note.name }}
-          <span
-            class="position-add-action material-icons pa-2"
-            v-if="hover"
-            @click="deleteNote(note._id)"
-            >delete</span
-          >
+          <DeleteNoteBtn
+            :note="note"
+            :columnRef="columnId"
+            :noteIndex="noteIndex"
+          />
         </v-card-title>
-        <v-btn
-          v-if="hover"
-          small
-          @click="openModal"
-          color="success"
-          class="ma-3"
-        >
-          edit
-        </v-btn>
       </v-card>
     </v-hover>
     <UpdateNoteModal />
+    <!-- <TestModal /> -->
   </v-col>
 </template>
 
@@ -35,9 +27,13 @@
 import { mapActions } from "vuex";
 import { modalTypes } from "@/api/types";
 import UpdateNoteModal from "./UpdateNoteModal";
+// import TestModal from "./TestModal";
+import DeleteNoteBtn from "./DeleteNoteBtn";
 export default {
   components: {
     UpdateNoteModal,
+    // TestModal,
+    DeleteNoteBtn,
   },
   props: {
     note: Object,
@@ -52,15 +48,12 @@ export default {
       setModalState: "projects/setModalState",
     }),
     openModal() {
-      this.noteData = this.$props.note;
+      const isDescriptionPresent = Boolean(this.$props.note.description)
       this.setModalState({
         isActive: true,
         type: modalTypes.UPDATE_NOTE_MODAL,
-        data: this.$props.note,
+        data: { ...this.$props.note, columumRef: this.$props.columnId , isDescriptionPresent},
       });
-    },
-    deleteNote(id) {
-      console.log(id, this.$props.noteIndex, this.$props.columnId);
     },
   },
 };
@@ -74,6 +67,14 @@ export default {
   opacity: 1;
 }
 .pointer {
+  cursor: pointer;
+}
+
+.note-delete-action {
+  position: absolute;
+  right: 0;
+  top: 0;
+  font-size: 20px;
   cursor: pointer;
 }
 </style>

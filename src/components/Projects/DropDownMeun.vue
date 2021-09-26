@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <PromptDontDeleteModal />
     <v-menu bottom right>
       <template v-slot:activator="{ on, attrs }">
         <v-btn icon v-bind="attrs" v-on="on" class="position-add-action mr-3">
@@ -22,13 +23,16 @@
 import { mapActions } from "vuex";
 import UpdateColumnModal from "./UpdateColumnModal";
 import { modalTypes } from "@/api/types";
+import PromptDontDeleteModal from "./PromptDontDeleteModal"
 export default {
   components: {
     UpdateColumnModal,
+    PromptDontDeleteModal
   },
   props: {
     column: Object,
     projectId: String,
+    noteLength: Number,
   },
   data() {
     return {
@@ -68,6 +72,14 @@ export default {
       });
     },
     async deleteColumn() {
+      if (this.$props.noteLength > 0) {
+        this.setModalState({
+          isActive: true,
+          type: modalTypes.PROMPT_DONT_DELETE_COL,
+          data: this.$props.noteLength,
+        });
+        return false;
+      }
       await this.delete({
         projectId: this.$props.projectId,
         columnId: this.$props.column._id,

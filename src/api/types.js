@@ -5,7 +5,8 @@ module.exports.modalTypes = {
   UPDATE_NOTE_MODAL : "update_note_modal",
   FETCH_TODOS_LOADING : "fetch_todos_loading",
   ADD_TODO_MODAL : "add_todo_modal",
-  UPDATE_TODO_MODAL : "update_todo_modal"
+  UPDATE_TODO_MODAL : "update_todo_modal",
+  PROMPT_DONT_DELETE_COL: "prompt_dont_delete_col"
 };
 
 module.exports.loadingStateTypes = {

@@ -12,7 +12,8 @@ const endpoints = {
     projects : {
         projects : '/projects',
         column : '/projects/column',
-        notes  : '/projects/note'
+        notes  : '/projects/note',
+        comment  : '/projects/note/comment'
     }
 }
 

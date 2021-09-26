@@ -11,6 +11,7 @@
         <DropDownMeun
           :column="column"
           :projectId="projectId"
+          :noteLength="column.notes.length"
           style="position: absolute"
         />
       </v-card-title>
