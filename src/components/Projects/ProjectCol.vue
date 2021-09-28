@@ -61,7 +61,7 @@ export default {
           update: { position: index },
        }
       });
-      let result = await this.update({
+      const result = await this.update({
         updateData: {
           projectId: this.$props.project._id,
           cols: colsupdate,
@@ -69,6 +69,7 @@ export default {
         multi: true,
       });
       if (result) {
+        console.log("PROJECT COLS",this.$props.project.columns.map(col => col.name));
         this.updateproject(this.$props.project);
       }
     },

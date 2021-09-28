@@ -8,6 +8,8 @@ import {
     storeData
 } from "../../utils/localStorage"
 
+import ProjectDict from "./ProjectDict";
+
 export default {
     async fetchProjects({
         commit,
@@ -84,6 +86,8 @@ export default {
             );
             if (status == 200) {
                 console.log(data);
+                /* Update Project Dictionary Index */
+                ProjectDict.colDict = data.data.columns
                 commit("SET_PROJECT", data.data);
             }
         } catch (error) {
@@ -186,6 +190,8 @@ export default {
     updateProjectState({
         commit
     }, project) {
+        /* Update Project Dictionary Index */
+        ProjectDict.colDict = project.columns
         commit("SET_PROJECT", project);
     }
 }

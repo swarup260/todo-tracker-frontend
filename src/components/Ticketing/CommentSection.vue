@@ -4,7 +4,7 @@
     <v-form ref="AddNewComment" @submit.prevent="AddNewComment">
       <v-text-field
         v-model="commentText"
-        :rules="inputRules"
+        :rules.sync="inputRules"
         label="Comment"
         placeholder="Write a comment..."
         outlined
@@ -66,10 +66,11 @@ export default {
       if (!this.$refs.AddNewComment.validate()) {
         return false;
       }
-      const { _id } = this.$props.note;
+      const { _id,columnRef } = this.$props.note;
       const result = await this.addComment({
         noteId: _id,
         comment: this.commentText,
+        columnRef : columnRef
       });
       if (result) {
         this.commentText = "";

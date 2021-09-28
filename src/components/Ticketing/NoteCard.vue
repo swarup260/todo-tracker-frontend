@@ -52,7 +52,7 @@ export default {
       this.setModalState({
         isActive: true,
         type: modalTypes.UPDATE_NOTE_MODAL,
-        data: { ...this.$props.note, columumRef: this.$props.columnId , isDescriptionPresent},
+        data: { ...this.$props.note, columnRef: this.$props.columnId , isDescriptionPresent},
       });
     },
   },

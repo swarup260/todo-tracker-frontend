@@ -8,6 +8,8 @@ import {
     storeData
 } from "../../utils/localStorage"
 
+import ProjectDict from "./ProjectDict";
+
 export default {
     async addNote({
         commit
@@ -33,12 +35,10 @@ export default {
                 return true;
             }
             const project = getData("project");
-            for (let index = 0; index < project.columns.length; index++) {
-                const column = project.columns[index];
-                if (column._id == newData.update.columnRef) {
-                    column.notes.push(data.data);
-                }
-            }
+            const columnRef = newData.update.columnRef
+            const projectDictIndex = ProjectDict.colDict
+            const colIndex = projectDictIndex[columnRef]
+            project.columns[colIndex.index].notes.push(data.data)
             storeData("project", project);
             commit("SET_PROJECT", project);
 
@@ -84,20 +84,15 @@ export default {
                 return true;
             }
 
-            // const project = getData("project");
-            // let columnIndex = 0
-            // let columnNotes = []
-            // project.columns.forEach((column, index) => {
-            //     if (column._id == deleteNoteObject.columnRef) {
-            //         columnIndex = index
-            //         columnNotes = column.notes.filter(note => note._id != deleteNoteObject.noteId)
-            //     }
-            // });
+            const project = getData("project");
+            const projectDictIndex = ProjectDict.colDict
+            const { noteId, columnRef } = udpateNoteObject
+            const colIndex = projectDictIndex[columnRef]
+            const noteIndex = colIndex.noteIndexes[noteId]
+            project.columns[colIndex.index].notes[noteIndex.index] = data.data
 
-            // project.columns[columnIndex].notes = columnNotes
-
-            // storeData("project", project);
-            // commit("SET_PROJECT", project);
+            storeData("project", project);
+            commit("SET_PROJECT", project);
 
             /* set the messages */
             commit(
@@ -145,16 +140,15 @@ export default {
             }
 
             const project = getData("project");
-            let columnIndex = 0
-            let columnNotes = []
-            project.columns.forEach((column, index) => {
-                if (column._id == deleteNoteObject.columnRef) {
-                    columnIndex = index
-                    columnNotes = column.notes.filter(note => note._id != deleteNoteObject.noteId)
-                }
-            });
+            const { columnRef } = deleteNoteObject
+            const projectDictIndex = ProjectDict.colDict
+            const colIndex = projectDictIndex[columnRef]
+            const columnNotes = project.columns[colIndex.index]
+                .notes
+                .filter(note => note._id != deleteNoteObject.noteId)
 
-            project.columns[columnIndex].notes = columnNotes
+
+            project.columns[colIndex.index].notes = columnNotes
 
             storeData("project", project);
             commit("SET_PROJECT", project);

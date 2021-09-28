@@ -21,36 +21,36 @@ import { mapActions } from "vuex";
 import { rules } from "../../utils/validation-rule";
 export default {
   props: {
-    note: Object
+    note: Object,
   },
   data() {
     return {
       inputRules: rules.inputRules,
       editTitle: false,
-      isLoading : false
+      isLoading: false,
     };
   },
-  methods : {
+  methods: {
     ...mapActions({
       udpate: "projects/udpateNote",
     }),
-    updateTitle(title){
-      this.isLoading = true
+    updateTitle(title) {
+      this.isLoading = true;
+      const { _id, projectRef, columnRef } = this.$props.note;
       const result = this.udpate({
-        noteId: this.$props.note._id,
-        projectId:this.$props.note.projectRef,
-        columnRef:this.$props.note.columnRef,
-        update : {
-          name : title
-        }
+        noteId: _id,
+        projectId: projectRef,
+        columnRef: columnRef,
+        update: {
+          name: title,
+        },
       });
       if (result) {
-        this.isLoading = false
-        this.editTitle = false
+        this.isLoading = false;
+        this.editTitle = false;
       }
-    }
-
-  }
+    },
+  },
 };
 </script>
 

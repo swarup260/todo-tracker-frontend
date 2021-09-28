@@ -45,18 +45,20 @@ export default {
     }),
     editDescription() {
       const { description } = this.$props.note;
-      this.$props.note.isDescriptionPresent = !this.$props.note.isDescriptionPresent;
+      this.$props.note.isDescriptionPresent =
+        !this.$props.note.isDescriptionPresent;
       this.descriptionText = description;
     },
     cancelEditDescription() {
       const flag = Boolean(this.$props.note.description);
-      console.log("isDescriptionPresent",flag);
+      console.log("isDescriptionPresent", flag);
       if (!flag) {
         this.descriptionText = "";
       }
 
       if (flag) {
-        this.$props.note.isDescriptionPresent = !this.$props.note.isDescriptionPresent;
+        this.$props.note.isDescriptionPresent =
+          !this.$props.note.isDescriptionPresent;
       }
     },
     async updateDescription() {
@@ -64,18 +66,21 @@ export default {
         return false;
       }
       this.isLoading = true;
-      const { _id } = this.$props.note;
+      const { _id, columnRef } = this.$props.note;
       const result = await this.udpate({
         noteId: _id,
         projectId: this.$props.note.projectRef,
+        columnRef: columnRef,
         update: {
           description: this.descriptionText,
         },
       });
+      this.$props.note.description = this.descriptionText;
       if (result) {
         this.isLoading = false;
         this.$props.note.isDescriptionPresent =
           !this.$props.note.isDescriptionPresent;
+        this.descriptionText = "";
       }
     },
   },
