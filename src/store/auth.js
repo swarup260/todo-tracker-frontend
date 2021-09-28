@@ -6,6 +6,7 @@ import { storeData, getData } from "../utils/localStorage";
 const defaultState = {
   token: null,
   user: {},
+  isLoading : false
 };
 
 export default {
@@ -18,9 +19,13 @@ export default {
     SET_USER(state, user) {
       state.user = user;
     },
+    SET_LOADING_STATE(state , value){
+      state.isLoading = value;
+    },
     RESET_STATE(state) {
       state.token = null;
       state.user = {};
+      state.isLoading = false;
     },
   },
   getters: {
@@ -30,6 +35,9 @@ export default {
       }
       return state.user;
     },
+    getLoadingState(state) {
+      return state.isLoading;
+    }
   },
   actions: {
     async login({ commit, dispatch }, credentials) {
@@ -53,11 +61,12 @@ export default {
           return false;
         }
       } catch (error) {
+        dispatch("setLoadingState" , false);
         // { root: true } to access the global mutations
         commit(
           "SET_MESSAGE",
           {
-            message: error.response.data.message,
+            message: error.message,
             type: "error",
           },
           {
@@ -87,11 +96,12 @@ export default {
           return false;
         }
       } catch (error) {
+        dispatch("setLoadingState" , false);
         // { root: true } to access the global mutations
         commit(
           "SET_MESSAGE",
           {
-            message: error.response.data.message,
+            message: error.message,
             type: "error",
           },
           {
@@ -122,7 +132,7 @@ export default {
         commit(
           "SET_MESSAGE",
           {
-            message: error.response.data.message,
+            message: error.message,
             type: "error",
           },
           {
@@ -133,6 +143,9 @@ export default {
     },
     resetAuthState({ commit }) {
       commit("RESET_STATE");
+    },
+    setLoadingState({ commit }, state) {
+      commit("SET_LOADING_STATE", state);
     },
   },
 };

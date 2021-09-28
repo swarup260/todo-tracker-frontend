@@ -11,13 +11,14 @@
         <DropDownMeun
           :column="column"
           :projectId="projectId"
+          :noteLength="column.notes.length"
           style="position: absolute"
         />
       </v-card-title>
       <v-card-subtitle
         v-if="noteModalState.isActive && noteModalState.columnID == column._id"
       >
-        <AddNote :columnId="column._id" :projectId="projectId" class="mt-2" />
+        <AddNote :columnId="column._id" :projectId="projectId" :notes="column.notes" class="mt-2" />
       </v-card-subtitle>
       <v-card-text>
         <draggable
@@ -74,15 +75,7 @@ export default {
       updateProjectState: "projects/updateProjectState",
     }),
     async updateNoteIndex(event, id, notes) {
-      console.log({
-        projectId: this.$props.projectId,
-        columnId: id,
-        update: {
-          notes: notes.map((note, index) => {
-            return { noteId: note._id, position: index };
-          }),
-        },
-      });
+      console.log(notes,event);
       const result = await this.updateColumn({
         updateData: {
           projectId: this.$props.projectId,

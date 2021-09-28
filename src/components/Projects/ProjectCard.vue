@@ -4,10 +4,12 @@
     <v-hover v-slot:default="{ hover }">
       <v-card
         outlined
-        color="red lighten-1"
+        color="lighten-1"
         :elevation="hover ? 20 : 2"
         :class="{ 'on-hover': hover }"
         max-width="344"
+        class="mx-auto"
+
       >
         <v-card-title
           class="headline text-truncate d-inline-block"
@@ -15,7 +17,6 @@
         >
           {{ project.name }}
           <span
-            :class="{ 'show-action': hover }"
             class="material-icons position-forward-action pa-2"
             @click="redirectProjectPage(project._id)"
           >
@@ -34,8 +35,8 @@
         >
           {{ project.description }}
         </v-card-text>
-        <v-card-actions v-if="hover">
-          <v-btn @click="updateProject()" text>Update</v-btn>
+        <v-card-actions>
+          <v-btn @click="updateProject()" class="green">Update</v-btn>
         </v-card-actions>
       </v-card>
     </v-hover>
@@ -81,7 +82,6 @@ export default {
   right: 0;
   bottom: 0;
   font-size: 20px;
-  opacity: 0;
   cursor: pointer;
 }
 
