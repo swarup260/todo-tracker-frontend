@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <span class="title pt-10">Activity</span>
-    <v-form ref="AddNewComment" @submit.prevent="AddNewComment">
+    <v-form ref="AddNewComment" @submit.prevent="addNewComment">
       <v-text-field
         v-model="commentText"
         :rules.sync="inputRules"
@@ -13,16 +13,12 @@
       <v-btn color="green" type="submit"> Save </v-btn>
     </v-form>
     <br />
-    <p
-      class="ma-2 chat-box"
-      v-for="(comment, index) in note.comments"
-      :key="index"
-    >
-      <span v-show="!showEditComment" class="subtitle-2">
+    <p class="ma-2 chat-box" v-for="(comment, index) in comments" :key="index">
+      <span v-show="hideComment && activeIndex != index" class="subtitle-2">
         {{ comment.comment }}
       </span>
       <v-text-field
-        v-if="showEditComment"
+        v-if="activeIndex == index"
         v-model="editCommentText"
         :rules="inputRules"
         label="Comment"
@@ -49,45 +45,56 @@
 
 <script>
 import { rules } from "../../utils/validation-rule";
+import { mapActions,mapGetters } from "vuex";
 export default {
   props: {
-    note: Object,
+    note: Object
   },
   data() {
     return {
       inputRules: rules.inputRules,
-      showEditComment: false,
+      hideComment: true,
       editCommentText: "",
       commentText: "",
+      activeIndex: -1,
     };
   },
   methods: {
-    async AddNewComment() {
+    ...mapActions({
+      add: "projects/addComment",
+      update: "projects/udpateComment",
+      delete: "projects/deleteComment",
+    }),
+    async addNewComment() {
       if (!this.$refs.AddNewComment.validate()) {
         return false;
       }
-      const { _id,columnRef } = this.$props.note;
-      const result = await this.addComment({
+      const { _id, columnRef } = this.$props.note;
+      const result = await this.add({
         noteId: _id,
         comment: this.commentText,
-        columnRef : columnRef
+        columnRef: columnRef,
       });
       if (result) {
         this.commentText = "";
       }
     },
     editComment(index) {
-      const { comments } = this.$props.note;
-      this.editCommentText = comments[index].comment;
-      this.showEditComment = !this.showEditComment;
+      /* SET THE INPUT TEXT  */
+      this.editCommentText =
+        this.editCommentText == "" ? this.comments[index].comment : "";
+      /* SET THE ACTIVE INDEX  */
+      this.activeIndex = this.activeIndex == -1 ? index : -1;
     },
     async updateComment(index) {
-      const { comments } = this.$props.note;
+      const { columnRef } = this.$props.note;
+      console.log(this.$props.note);
       const { _id } = this.$props.note;
-      const commentId = comments[index]._id;
-      const result = await this.updateComment({
+      const commentId = this.comments[index]._id;
+      const result = await this.update({
         noteId: _id,
         commentId: commentId,
+        columnRef: columnRef,
         update: {
           comment: this.editCommentText,
         },
@@ -95,20 +102,33 @@ export default {
 
       if (result) {
         this.editCommentText = "";
-        this.showEditComment = !this.showEditComment;
+        this.activeIndex = -1;
       }
     },
     async deletComment(index) {
-      const { comments } = this.$props.note;
+      const { comments, columnRef } = this.$props.note;
       const { _id } = this.$props.note;
       const commentId = comments[index]._id;
-      await this.updateComment({
+      await this.delete({
         noteId: _id,
         commentId: commentId,
+        columnRef: columnRef,
       });
-      // comments.splice(index, 1);
     },
   },
+  computed : {
+    ...mapGetters({
+      getComments : "projects/getComments"
+    }),
+    comments : {
+      get(){
+        return this.getComments
+      },
+      set(newVal){
+        console.log(newVal);
+      }
+    }
+  }
 };
 </script>
 

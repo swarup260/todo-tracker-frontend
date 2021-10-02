@@ -39,6 +39,7 @@ export default {
             const projectDictIndex = ProjectDict.colDict
             const colIndex = projectDictIndex[columnRef]
             project.columns[colIndex.index].notes.push(data.data)
+            ProjectDict.colDict = project.columns
             storeData("project", project);
             commit("SET_PROJECT", project);
 

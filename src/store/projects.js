@@ -20,7 +20,8 @@ const defaultState = {
 		columnID: "",
 	},
 	project: {},
-	isLoading: false
+	isLoading: false,
+	comments : []
 };
 
 export default {
@@ -60,12 +61,16 @@ export default {
 		SET_LOADING_STATE(state, value) {
 			state.isLoading = value;
 		},
+		SET_COMMENTS(state , comments){
+			state.comments = comments
+		},
 		RESET_STATE(state) {
 			state.projects = [];
+			state.comments = [];
 			state.project = {};
 			state.modalState = false;
 			state.isLoading = false;
-		},
+		}
 	},
 	getters: {
 		getProjects(state) {
@@ -88,6 +93,10 @@ export default {
 		},
 		getLoadingState(state) {
 			return state.isLoading;
+		},
+		getComments(state) {
+			console.log("STORE comments",state.comments);
+			return state.comments
 		}
 	},
 	actions: {
@@ -121,6 +130,6 @@ export default {
 			commit
 		}, state) {
 			commit("SET_LOADING_STATE", state);
-		},
+		}
 	},
 };

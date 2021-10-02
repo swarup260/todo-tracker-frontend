@@ -46,9 +46,11 @@ export default {
   methods: {
     ...mapActions({
       setModalState: "projects/setModalState",
+      setComments : "projects/updateCommentState"
     }),
     openModal() {
       const isDescriptionPresent = Boolean(this.$props.note.description)
+      this.setComments(this.$props.note.comments)
       this.setModalState({
         isActive: true,
         type: modalTypes.UPDATE_NOTE_MODAL,
