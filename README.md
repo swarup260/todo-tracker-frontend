@@ -46,12 +46,12 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 - [X] Project Management Api Integration
 - [X] Project Management View
 ### Version 1.4
-- [ ] Project Notes Api Integration
-- [ ] Project Management Bug Fixes
+- [X] Project Notes Api Integration
+- [X] Project Management Bug Fixes
 ### Version 1.5
-- [ ] No Internet  
-- [ ] Loader Screen while fetch the records
-- [ ] Remove current modal functionality from todo and move to vuex
+- [X] No Internet  
+- [X] Loader Screen while fetch the records
+- [X] Remove current modal functionality from todo and move to vuex
 ### Version 1.6
 - [ ] Editor.js integration in Todo description 
 - [ ] Editor.js integration in Project Notes
@@ -65,3 +65,5 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 
 
+## RoadMap Optional
+- [ ] Docker  
