@@ -66,4 +66,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 
 ## RoadMap Optional
-- [ ] Docker  
+- [X] Docker  
